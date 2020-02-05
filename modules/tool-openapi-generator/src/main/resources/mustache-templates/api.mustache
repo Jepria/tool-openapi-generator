@@ -1,0 +1,146 @@
+package {{apiPackage}};
+
+import {{modelPackage}}.*;
+import {{apiPackage}}.{{className}}ServerFactory;
+import org.jepria.server.data.OptionDto;
+import org.jepria.server.data.SearchRequestDto;
+import org.jepria.server.service.rest.ExtendedResponse;
+import org.jepria.server.service.rest.JaxrsAdapterBase;
+import org.jepria.server.service.security.HttpBasic;
+
+import io.swagger.annotations.ApiParam;
+import io.swagger.jaxrs.*;
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+import java.util.Map;
+import java.util.List;
+
+import java.io.InputStream;
+
+import javax.servlet.ServletConfig;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.*;
+
+@Path("{{rootPath}}")
+
+public class {{className}}JaxrsAdapter  {
+
+protected final EntityEndpointAdapter entityEndpointAdapter = new EntityEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getEntityService());
+
+protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getSearchService(() -> request.getSession()));
+
+{{#operations}}
+  {{#operation}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    return delegate.{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+  }
+  {{/operation}}
+
+{{/operations}}
+{{#hasCrud}}
+//------------ entity methods ------------//
+{{/hasCrud}}
+{{#crudOperations}}
+  {{#isCreate}}
+  @POST
+  public Response create({{className}}CreateDto record) {
+    return entityEndpointAdapter.create(record);
+  }
+  {{/isCreate}}
+  {{#isRead}}
+  @GET
+  @Path("/{recordId}")
+  public Response getRecordById(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId) {
+    FeatureDto result = ({{className}}Dto) entityEndpointAdapter.getRecordById(recordId);
+    return Response.ok(result).build();
+  }
+  {{/isRead}}
+  {{#isUpdate}}
+  @PUT
+  @Path("/{recordId}")
+  public Response update(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId, {{className}}UpdateDto record) {
+    entityEndpointAdapter.update(recordId, record);
+    return Response.ok().build();
+  }
+  {{/isUpdate}}
+  {{#isDelete}}
+  @DELETE
+  @Path("/{recordId}")
+  public Response deleteRecordById(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId) {
+    entityEndpointAdapter.deleteRecordById(recordId);
+    return Response.ok().build();
+  }
+  {{/isDelete}}
+
+{{/crudOperations}}
+{{#hasSearch}}
+//------------ search methods ------------//
+{{/hasSearch}}
+{{#searchOperations}}
+  {{#isPostSearch}}
+  @POST
+  @Path("/search")
+  public Response postSearch(
+      SearchRequestDto<{{className}}SearchDto> searchRequestDto,
+      @Pattern(regexp =
+        "(resultset/paged-by-\\d+/\\d+)|(resultset\\?pageSize\\d+&page=\\d+)|(resultset\\?page=\\d+&pageSize=\\d+)",
+        message = "Bad Extended-Response header value")
+      @HeaderParam(ExtendedResponse.REQUEST_HEADER_NAME) String extendedResponse,
+      @HeaderParam("Cache-Control") String cacheControl) {
+    return searchEndpointAdapter.postSearch(searchRequestDto, extendedResponse, cacheControl);
+  }
+  {{/isPostSearch}}
+  {{#isGetSearchRequest}}
+  @GET
+  @Path("/search/{searchId}")
+  public Response getSearchRequest(
+      @PathParam("searchId") String searchId) {
+      SearchRequestDto<{{className}}SearchDto> result = (SearchRequestDto <{{className}}SearchDto>)searchEndpointAdapter.getSearchRequest(searchId);
+    return Response.ok(result).build();
+  }
+  {{/isGetSearchRequest}}
+  {{#isGetSearchResultsetSize}}
+  @GET
+  @Path("/search/{searchId}/resultset-size")
+  public Response getSearchResultsetSize(
+      @PathParam("searchId") String searchId,
+      @HeaderParam("Cache-Control") String cacheControl) {
+    int result = searchEndpointAdapter.getSearchResultsetSize(searchId, cacheControl);
+    return Response.ok(result).build();
+  }
+  {{/isGetSearchResultsetSize}}
+  {{#isGetResultset}}
+  @GET
+  @Path("/search/{searchId}/resultset")
+  public Response getResultset(
+      @PathParam("searchId") String searchId,
+      @QueryParam("pageSize") Integer pageSize,
+      @QueryParam("page") Integer page,
+      @HeaderParam("Cache-Control") String cacheControl) {
+      List<{{className}}Dto> result = (List <{{className}}Dto>)searchEndpointAdapter.getResultset(searchId, pageSize, page, cacheControl);
+    return result == null ? Response.noContent().build() : Response.ok(result).build();
+  }
+  {{/isGetResultset}}
+  {{#isGetResultsetPaged}}
+  @GET
+  @Path("/search/{searchId}/resultset/paged-by-{pageSize:\\d+}/{page}")
+  public Response getResultsetPaged(
+      @PathParam("searchId") String searchId,
+      @PathParam("pageSize") Integer pageSize,
+      @PathParam("page") Integer page,
+      @HeaderParam("Cache-Control") String cacheControl) {
+      List<{{className}}Dto> result = (List <{{className}}Dto>)searchEndpointAdapter.getResultsetPaged(searchId, pageSize, page, cacheControl);
+    return result == null ? Response.noContent().build() : Response.ok(result).build();
+  }
+  {{/isGetResultsetPaged}}
+
+{{/searchOperations}}
+
+}

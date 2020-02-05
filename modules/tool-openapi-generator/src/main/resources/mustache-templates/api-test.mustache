@@ -1,0 +1,268 @@
+package {{apiPackage}};
+import {{modelPackage}}.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.technology.jep.jepriashowcase.feature.dto.{{className}}Dto;
+import com.technology.jep.jepriashowcase.feature.dto.{{className}}SearchDto;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import javax.ws.rs.core.MediaType;
+import org.jepria.server.data.SearchRequestDto;
+import org.junit.Assert;
+import org.junit.Test;
+
+public class {{className}}JaxrsAdapterTest {
+
+  private static final String baseUrl          = ""; // TODO
+  private static final String operatorName     = ""; // TODO
+  private static final String operatorPassword = ""; // TODO
+
+{{#operations}}
+{{#operation}}
+  @Test
+  public void {{nickname}}() {
+    String testUrl = baseUrl + "{{path}}";
+
+    RestAssured.given()
+        .auth()
+      .basic(operatorName, operatorPassword)
+      .when()
+      .get(testUrl)
+      .then()
+      .assertThat()
+      .statusCode(200);
+ }
+{{/operation}}
+
+{{/operations}}
+/*************************************************************/
+{{#crudOperations}}
+  {{#isCreate}}
+  @Test
+  public void createRecordTest() {
+    String testUrl = baseUrl;
+
+    {{className}}Dto testDto = new {{className}}Dto();
+    //TODO: set DTO fields
+
+    RequestSpecification requestPost =
+        RestAssured.given().auth().basic(operatorName, operatorPassword)
+            .header("Content-Type", "application/json")
+            .body(testDto);
+
+    Response postResponse = requestPost.post(testUrl);
+
+    int statusCode = postResponse.statusCode();
+    Assert.assertEquals(201, statusCode);
+  }
+  {{/isCreate}}
+  {{#isRead}}
+  @Test
+  public void getRecordByIdTest() {
+    Integer recordId = 1; //TODO: set record ID for test
+
+    String   testUrl  = baseUrl + "/" + recordId;
+    Response response = RestAssured.given().auth().basic(operatorName, operatorPassword).when().get(testUrl);
+    Assert.assertEquals(testUrl, 200, response.statusCode());
+    //TODO: check response DTO
+  }
+  {{/isRead}}
+  {{#isUpdate}}
+  @Test
+  public void updateRecordTest() {
+    Integer recordId = 0; //TODO: set record ID for test
+
+    String testUrl = baseUrl + "/" + recordId;
+
+    {{className}}Dto testDto = new {{className}}Dto();
+    //TODO: set DTO fields
+
+    RequestSpecification requestPost =
+        RestAssured.given().auth().basic(operatorName, operatorPassword)
+            .header("Content-Type", "application/json") 
+            .body(testDto);
+
+    Response postResponse = requestPost.post(testUrl);
+
+    int statusCode = postResponse.statusCode();
+    Assert.assertEquals(200, statusCode);
+
+    //TODO: check response DTO
+  }
+  {{/isUpdate}}
+  {{#isDelete}}
+  @Test
+  public void deleteRecordTest() {
+    Integer recordId = 0; //TODO: set record ID for test
+
+    String testUrl = baseUrl + "/" + recordId;
+
+    RequestSpecification requestDelete =
+        RestAssured.given().auth().basic(operatorName, operatorPassword);
+
+    Response deleteResponse = requestDelete.delete(testUrl);
+
+    int statusCode = deleteResponse.statusCode();
+    Assert.assertEquals(200, statusCode); //TODO: maybe should be 204
+  }
+  {{/isDelete}}
+{{/crudOperations}}
+
+/**********************************************/
+{{#hasCrud}}
+  // CRUD complex test
+  private String createRecord({{className}}Dto testDto, String location) {
+    RequestSpecification requestPost =
+        RestAssured.given().auth().basic(operatorName, operatorPassword)
+            .header("Content-Type", "application/json")
+            .body(testDto);
+
+    Response postResponse = requestPost.post(location);
+
+    int statusCode = postResponse.statusCode();
+    Assert.assertEquals(201, statusCode);
+    return postResponse.getHeader("Location");
+  }
+
+  private void updateRecord({{className}}Dto testDto, Integer recordId) {
+    updateRecord(testDto, baseUrl + "/" + recordId);
+  }
+
+  private void updateRecord({{className}}Dto testDto, String location) {
+    RequestSpecification requestPost =
+        RestAssured.given().auth().basic(operatorName, operatorPassword)
+            .header("Content-Type", "application/json")
+            .body(testDto);
+    Response postResponse = requestPost.put(location);
+
+    int statusCode = postResponse.statusCode();
+    Assert.assertEquals(200, statusCode);
+  }
+
+  private {{className}}Dto getRecord(String location) {
+    Response response = RestAssured.given().auth().basic(operatorName, operatorPassword).when().get(location);
+    Assert.assertEquals(location, 200, response.statusCode());
+    Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
+    return gson.fromJson(response.asString(), {{className}}Dto.class);
+  }
+
+  private {{className}}Dto getRecord(Integer recordId) {
+    String testUrl = baseUrl + "/" + recordId;
+    return getRecord(testUrl);
+  }
+
+  private void deleteRecord(int recordId) {
+    deleteRecord(baseUrl + "/" + recordId);
+  }
+
+  private void deleteRecord(String location) {
+    RequestSpecification requestDelete =
+        RestAssured.given().auth().basic(operatorName, operatorPassword);
+
+    Response deleteResponse = requestDelete.delete(location);
+
+    int statusCode = deleteResponse.statusCode();
+    Assert.assertEquals(200, statusCode); //TODO: maybe should be 204
+  }
+
+  @Test
+  public void {{className}}CrudTest() {
+    String testUrl = baseUrl;
+
+    {{className}}Dto dto = new {{className}}Dto();
+    //TODO: set DTO fields
+    dto.set{{className}}Name("name");
+    dto.set{{className}}NameEn("name");
+    dto.setDescription("TestDescription");
+
+    String location = createRecord(dto, testUrl);
+
+    {{className}}Dto createdDto = getRecord(location);
+    //TODO: compare dto and createdDto
+
+    {{className}}Dto newDto = new {{className}}Dto();
+    newDto.set{{className}}Name("newName");
+    newDto.set{{className}}NameEn("newName");
+
+    updateRecord(newDto, location);
+
+    {{className}}Dto updatedDto = getRecord(location);
+    //TODO: compare newDto and updatedDto
+
+    deleteRecord(location);
+  }
+{{/hasCrud}}
+{{#hasSearch}}
+  // test search API
+  private String postSearchRequest(SearchRequestDto<{{className}}SearchDto> searchRequestDto, String location) {
+
+    RequestSpecification request =
+        RestAssured.given().auth().basic(operatorName, operatorPassword)
+            .header("content-type", MediaType.APPLICATION_JSON + ";charset=utf-8")
+            .body(searchRequestDto);
+
+    Response postResponse = request.post(location);
+    Assert.assertEquals(201, postResponse.statusCode());
+
+    return postResponse.getHeader("location");
+  }
+
+  private SearchRequestDto<{{className}}SearchDto> getSearchRequest(String searchLocation) {
+    RequestSpecification request =
+        RestAssured.given().auth().basic(operatorName, operatorPassword);
+
+    Response response = request.get(searchLocation);
+    Assert.assertEquals(200, response.getStatusCode());
+
+    return new Gson().fromJson(response.asString(), SearchRequestDto.class);
+  }
+
+  private Integer get{{className}}SearchResultSetSize(String location) {
+    String testUrl = location + "/resultset-size";
+
+    RequestSpecification request =
+        RestAssured.given().auth().basic(operatorName, operatorPassword);
+
+    Response response = request.get(testUrl);
+    Assert.assertEquals(200, response.getStatusCode());
+
+    return response.getBody().as(Integer.TYPE);
+  }
+
+  private {{className}}Dto get{{className}}Result(String location) {
+    RequestSpecification request =
+        RestAssured.given().auth().basic(operatorName, operatorPassword);
+
+    Response response = request.get(location);
+
+    Assert.assertEquals(200, response.statusCode());
+
+    Gson gson = new GsonBuilder().create();
+    return gson.fromJson(response.asString(), {{className}}Dto.class);
+  }
+
+  @Test
+  public void {{className}}SearchTest() {
+    String testUrl = baseUrl + "/search";
+
+    SearchRequestDto<{{className}}SearchDto> searchRequestDto = new SearchRequestDto<>();
+
+    {{className}}SearchDto searchDto = new {{className}}SearchDto();
+    searchDto.set{{className}}Id(151);
+    searchRequestDto.setTemplate(searchDto);
+
+    String searchLocation = postSearchRequest(searchRequestDto, testUrl);
+
+    SearchRequestDto<{{className}}SearchDto> readRequest = getSearchRequest(searchLocation);
+    //TODO: compare SearchRequestDto-s
+
+    if (get{{className}}SearchResultSetSize(searchLocation) > 0) {
+      get{{className}}Result(searchLocation);
+    }
+
+  }
+{{/hasSearch}}
+
+}
