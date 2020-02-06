@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jepria.tools</groupId>
-  <artifactId>tool-openapi-generator-cli</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <groupId>org.jepria.tools.openapi</groupId>
+  <artifactId>generator-cli</artifactId>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <build>
@@ -44,7 +44,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>libs/</classpathPrefix>
-              <mainClass>org.jepria.tools.codegen.JepriaOpenAPIGenerator</mainClass>
+              <mainClass>org.jepria.tools.openapi.generator.GeneratorCli</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -114,9 +114,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jepria.tools</groupId>
-      <artifactId>tool-openapi-generator</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>org.jepria.tools.openapi</groupId>
+      <artifactId>generator</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 
