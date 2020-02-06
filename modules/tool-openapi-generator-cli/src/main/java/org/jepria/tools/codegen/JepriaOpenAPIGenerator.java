@@ -39,7 +39,8 @@ public class JepriaOpenAPIGenerator {
       System.out.println(commandLine.getOptionValue(SPEC_OPT));
       specPath = commandLine.getOptionValue(SPEC_OPT);
     } else {
-      System.out.println("Укажите файл спецификации");
+      System.out.println("Set OpenApi specification file");
+      return;
     }
     if (commandLine.hasOption(OUTPUT_OPT)) {
       System.out.println(commandLine.getOptionValue(OUTPUT_OPT));

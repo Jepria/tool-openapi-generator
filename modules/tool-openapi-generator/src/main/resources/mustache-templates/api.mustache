@@ -35,12 +35,42 @@ protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpoint
 
 {{#operations}}
   {{#operation}}
+  {{#isGet}}
   @{{httpMethod}}
   {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
   public Response {{nickname}}({{#allParams}}
       {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
-    return delegate.{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+    List<OptionDto<Integer>> result = {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok(result).build();
   }
+  {{/isGet}}
+  {{#isPut}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+  }
+  {{/isPut}}
+  {{#isPost}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+   }
+  {{/isPost}}
+  {{#isDelete}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+   }
+  {{/isDelete}}
   {{/operation}}
 
 {{/operations}}
@@ -58,7 +88,7 @@ protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpoint
   @GET
   @Path("/{recordId}")
   public Response getRecordById(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId) {
-    FeatureDto result = ({{className}}Dto) entityEndpointAdapter.getRecordById(recordId);
+  {{className}}Dto result = ({{className}}Dto) entityEndpointAdapter.getRecordById(recordId);
     return Response.ok(result).build();
   }
   {{/isRead}}

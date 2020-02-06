@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jepria.tools.codegen.openapi.languages.jersey.rest.operations.CrudJaxrsOperation;
-import org.jepria.tools.codegen.openapi.languages.jersey.rest.operations.JaxrsOperation;
+import org.jepria.tools.codegen.openapi.languages.jersey.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.codegen.openapi.languages.jersey.rest.operations.SearchJaxrsOperation;
 import org.jepria.tools.codegen.openapi.utils.StringUtils;
 
@@ -24,8 +24,8 @@ public class BaseJaxrsDto {
   private boolean hasCrud      = false;
   private boolean hasSearch    = false;
 
-  private List<JaxrsOperation>       operations       = new ArrayList<>();
-  private List<CrudJaxrsOperation>   crudOperations   = new ArrayList<>();
+  private List<OtherJaxrsOperation> operations     = new ArrayList<>();
+  private List<CrudJaxrsOperation>  crudOperations = new ArrayList<>();
   private List<SearchJaxrsOperation> searchOperations = new ArrayList<>();
 
   public BaseJaxrsDto(String rootPath) {
@@ -170,7 +170,7 @@ public class BaseJaxrsDto {
       this.searchOperations.add(new SearchJaxrsOperation(operationName, httpMethod, path, operation));
       hasSearch = true;
     } else {
-      this.operations.add(new JaxrsOperation(operationName, httpMethod, path, operation));
+      this.operations.add(new OtherJaxrsOperation(operationName, httpMethod, path, operation));
     }
   }
 
