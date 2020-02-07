@@ -1,0 +1,63 @@
+package {{apiPackage}}.feature;
+
+import org.jepria.server.data.OptionDto;
+import org.jepria.server.service.security.Credential;
+
+import java.util.List;
+
+public class {{className}}Service {
+
+  public void set{{className}}Responsible(Integer featureId, Integer responsibleId, Credential credential) {
+    {{className}}ServerFactory.getInstance().getDao().set{{className}}Responsible(featureId, responsibleId, credential.getOperatorId());
+  }
+
+  public List<OptionDto<Integer>> get{{className}}Operator() {
+    return {{className}}ServerFactory.getInstance().getDao().get{{className}}Operator();
+  }
+
+  public List<OptionDto<String>> get{{className}}Status() {
+    return {{className}}ServerFactory.getInstance().getDao().get{{className}}Status();
+  }
+
+  {{#operations}}
+  {{#operation}}
+  {{#isGet}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    List<OptionDto<Integer>> result = {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok(result).build();
+  }
+  {{/isGet}}
+  {{#isPut}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+  }
+  {{/isPut}}
+  {{#isPost}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+   }
+  {{/isPost}}
+  {{#isDelete}}
+  @{{httpMethod}}
+  {{#subresourceOperation}}@Path("{{{path}}}"){{/subresourceOperation}}
+  public Response {{nickname}}({{#allParams}}
+      {{#allAnnotations}}@{{annotation}}("{{annotationVal}}"){{/allAnnotations}} {{type}} {{name}}, {{/allParams}}) {
+    {{className}}ServerFactory.getInstance().getService().{{nickname}}({{#allParams}} {{type}} {{name}}, {{/allParams}});
+    return Response.ok().build();
+   }
+  {{/isDelete}}
+  {{/operation}}
+
+{{/operations}}
+
+
+}

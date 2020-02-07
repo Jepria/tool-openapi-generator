@@ -156,6 +156,11 @@ public class BaseJaxrsDto {
 
   private void addOperation(String httpMethod, String path, Operation operation) {
     String operationName = operation.getOperationId();
+
+    if (null == operationName){
+      System.out.println("Can't set operationName for operation: " + httpMethod + " " + path);
+    }
+
     if (null != path) {
       path = path.replaceFirst("\\Q" + this.rootPath + "\\E", "");
     }

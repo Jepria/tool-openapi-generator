@@ -1,9 +1,12 @@
 package org.jepria.tools.openapi.generator.languages.jersey.rest.operations;
 
+import static org.jepria.tools.openapi.generator.utils.SchemaUtils.getSchemaType;
 import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;
 
 import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class JaxrsOperation {
   String httpMethod;
   String nickname;
   String path;
+  String returnType;
 
   SubResourceOperation subresourceOperation = null;
 
@@ -74,24 +78,28 @@ public class JaxrsOperation {
   }
 
   public JaxrsOperation(String nickname, String httpMethod, String path,
-      Operation oas3Operation
+      Operation operation
   ) {
     this.nickname   = nickname;
     this.httpMethod = httpMethod;
     this.operation  = httpMethod;
     this.path       = path;
 
+    if ("GET".equals(httpMethod)) {
+      this.returnType = getReturnType(operation);
+    }
+
     if (null != path) {
       subresourceOperation = new SubResourceOperation(path);
     }
 
-    if (null != oas3Operation.getParameters()) {
-      for (io.swagger.v3.oas.models.parameters.Parameter parameter : oas3Operation
+    if (null != operation.getParameters()) {
+      for (io.swagger.v3.oas.models.parameters.Parameter parameter : operation
           .getParameters()) {
         this.allParams.add(new Parameter(parameter.getName(), parameter.getSchema().getType(), inToJerseyAnnotation(parameter.getIn()), parameter.getName()));
       }
     }
-    Parameter parameter = this.getBodyParams(oas3Operation);
+    Parameter parameter = this.getBodyParams(operation);
     if (null != parameter) {
       this.allParams.add(parameter);
     }
@@ -137,5 +145,18 @@ public class JaxrsOperation {
     String[] arr = ref.split("/");
     return arr[arr.length - 1];
   }
+
+  private String getReturnType(Operation operation) {
+    String returnType = null;
+    if (null != operation.getResponses().get("200") &&
+        null != operation.getResponses().get("200").getContent()) {
+      Schema schema = operation.getResponses().get("200").getContent().values().iterator().next().getSchema();
+      returnType = getSchemaType(schema);
+      return returnType;
+    } else {
+      return null;
+    }
+  }
+
 
 }

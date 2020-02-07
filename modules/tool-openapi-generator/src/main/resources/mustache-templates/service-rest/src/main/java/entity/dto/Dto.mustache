@@ -1,0 +1,26 @@
+
+import org.jepria.server.data.OptionDto;
+
+import java.util.Date;
+
+public class {{className}} {
+
+{{#fields}}
+  {{#field}}
+  private {{type}} {{name}};
+  {{/field}}
+
+{{/fields}}  
+{{#fields}}
+  {{#field}}
+  public void set{{Name}}({{type}} {{name}}){
+    this.{{name}} = {{name}};
+  }
+  
+  public {{type}} get{{Name}}(){
+    return this.{{name}};
+  }
+  {{/field}}
+
+{{/fields}}  
+}

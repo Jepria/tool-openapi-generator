@@ -14,12 +14,6 @@ class ApplicationStructureCreator {
 
   List<String> folders = new ArrayList<>();
 
-  public static void main(String[] args) {
-    OpenAPI openAPI = new OpenAPIV3Parser()
-        .read("D:\\SVN\\JepRiaShowcase\\App\\service-rest\\swagger_new.yaml");
-
-    System.out.println(openAPI.getOpenapi());
-  }
 
   public ApplicationStructureCreator(String outputFolderName) {
     this.outputFolderName = outputFolderName;

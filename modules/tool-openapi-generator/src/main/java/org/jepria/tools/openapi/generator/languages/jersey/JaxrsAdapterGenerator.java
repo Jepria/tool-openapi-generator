@@ -10,6 +10,8 @@ import org.jepria.tools.openapi.generator.languages.jersey.rest.BaseJaxrsDto;
 
 public class JaxrsAdapterGenerator extends DefaultGenerator {
 
+  private static final String TEMPLATE_FILE_NAME = "service-rest/src/main/java/entity/";
+
   public JaxrsAdapterGenerator(OpenAPI openAPI) {
     super(openAPI);
     setTemplateFileName("/mustache-templates/api.mustache");
