@@ -17,6 +17,9 @@ public class GeneratorCli {
   public static final  String OUTPUT_OPT      = "o";
   private static final String OUTPUT_OPT_NAME = "output";
 
+  public static final String PACKAGE_OPT      = "pkg";
+  public static final String PACKAGE_OPT_NAME = "package";
+
   public static final  String GEN_OPT      = "g";
   private static final String GEN_OPT_NAME = "generate";
   public static final  String GEN_TESTS    = "tests";
@@ -33,8 +36,10 @@ public class GeneratorCli {
 
     CommandLine commandLine = new DefaultParser().parse(getOptions(), args);
 
-    String specPath   = null;
-    String outputPath = null;
+    String specPath    = null;
+    String outputPath  = null;
+    String mainPackage = null;
+
     if (commandLine.hasOption(SPEC_OPT)) {
       System.out.println(commandLine.getOptionValue(SPEC_OPT));
       specPath = commandLine.getOptionValue(SPEC_OPT);
@@ -50,10 +55,17 @@ public class GeneratorCli {
       System.out.println("There is no output directory option. The default output directory will be used: " + outputPath);
     }
 
+    if (commandLine.hasOption(PACKAGE_OPT)) {
+      mainPackage = commandLine.getOptionValue(PACKAGE_OPT);
+    }
+
     if (commandLine.hasOption(GEN_OPT)) {
       if (commandLine.getOptionValue(GEN_OPT).equals(GEN_REST)) {
         System.out.println("Generate rest adapters...");
         JaxrsAdapterGenerator adapterGen = new JaxrsAdapterGenerator(specPath);
+        if (null != mainPackage) {
+          adapterGen.setMainPackage(mainPackage);
+        }
         adapterGen.create();
         adapterGen.saveToFiles(outputPath);
       } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_TESTS)) {
@@ -82,10 +94,15 @@ public class GeneratorCli {
     outputDirOpt.setArgs(1);
     outputDirOpt.setArgName(GEN_OPT_NAME);
 
+    Option packageOpt = new Option(PACKAGE_OPT, PACKAGE_OPT_NAME, true, "Package");
+    outputDirOpt.setArgs(1);
+    outputDirOpt.setArgName(PACKAGE_OPT_NAME);
+
     Options options = new Options();
     options.addOption(specOpt);
     options.addOption(outputDirOpt);
     options.addOption(generateOpt);
+    options.addOption(packageOpt);
 
     return options;
   }

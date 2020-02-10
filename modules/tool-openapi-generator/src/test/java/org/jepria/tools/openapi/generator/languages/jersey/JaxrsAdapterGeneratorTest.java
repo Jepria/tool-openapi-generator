@@ -1,6 +1,5 @@
 package org.jepria.tools.openapi.generator.languages.jersey;
 
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 class JaxrsAdapterGeneratorTest {
@@ -12,7 +11,7 @@ class JaxrsAdapterGeneratorTest {
 
   @Test
   void createTest() throws Exception {
-    String specLocation = specEmployee;
+    String specLocation = specShowcase;
     String outputFolder = new java.io.File(".").getCanonicalPath() + "\\temp\\JaxrsAdapterGenerator\\";
 
     JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(specLocation);

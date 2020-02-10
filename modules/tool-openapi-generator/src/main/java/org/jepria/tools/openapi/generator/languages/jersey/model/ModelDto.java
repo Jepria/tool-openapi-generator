@@ -1,5 +1,9 @@
 package org.jepria.tools.openapi.generator.languages.jersey.model;
 
+import static org.jepria.tools.openapi.generator.utils.SchemaUtils.refToName;
+import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;
+import static org.jepria.tools.openapi.generator.utils.StringUtils.underscore;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.DateSchema;
@@ -39,6 +43,8 @@ public class ModelDto {
       for (Object fieldName : schema.getProperties().keySet()) {
         ModelField dtoField = null;
         if (schema.getProperties().get(fieldName) instanceof StringSchema) {
+          sanitizeName(fieldName.toString());
+          underscore(fieldName.toString());
           dtoField = new ModelField(fieldName.toString(), "String");
         } else if (schema.getProperties().get(fieldName) instanceof IntegerSchema) {
           dtoField = new ModelField(fieldName.toString(), "Integer");
@@ -75,15 +81,6 @@ public class ModelDto {
 
   public String getClassName() {
     return className;
-  }
-
-  private static String refToName(String ref) {
-    String refName = ref.split("/")[ref.split("/").length - 1];
-    switch (refName) {
-      case "OptionDtoInteger": refName = "OptionDto<Integer>"; break;
-      case "OptionDtoString":  refName = "OptionDto<String>";  break;
-    }
-    return refName;
   }
 
   private static boolean isSystem(String className){

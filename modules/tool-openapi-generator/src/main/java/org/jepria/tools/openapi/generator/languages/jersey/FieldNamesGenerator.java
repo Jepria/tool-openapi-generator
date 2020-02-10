@@ -9,15 +9,17 @@ import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.model.ModelDto;
 
-public class DtoGenerator extends DefaultGenerator {
+public class FieldNamesGenerator extends DefaultGenerator {
 
-  public DtoGenerator(OpenAPI spec) {
+  private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/FieldNames.mustache";
+
+  public FieldNamesGenerator(OpenAPI spec) {
     this.setOpenAPI(spec);
-    setTemplateFileName("/mustache-templates/dto.mustache");
+    setTemplateFileName(TEMPLATE_FILE_NAME);
   }
 
-  public DtoGenerator(String specLocation) {
-    this( new OpenAPIV3Parser().read(specLocation));
+  public FieldNamesGenerator(String specLocation) {
+    this(new OpenAPIV3Parser().read(specLocation));
   }
 
   @Override
@@ -28,14 +30,12 @@ public class DtoGenerator extends DefaultGenerator {
 
     for (ModelDto dto : list) {
       try {
-        map.put(dto.getClassName(), this.fillTemplate(dto));
+        map.put(dto.getClassName() + "FieldNames", this.fillTemplate(dto));
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
 
     this.setValues(map);
-
   }
-
 }

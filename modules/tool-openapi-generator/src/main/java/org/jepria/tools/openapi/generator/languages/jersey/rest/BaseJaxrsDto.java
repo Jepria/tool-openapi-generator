@@ -19,6 +19,7 @@ public class BaseJaxrsDto {
 
   private String  apiPackage;
   private String  modelPackage;
+  private String  mainPackage;
   private String  className;
   private String  rootPath;
   private boolean hasCrud      = false;
@@ -179,4 +180,7 @@ public class BaseJaxrsDto {
     }
   }
 
+  public void setMainPackage(String mainPackage) {
+    this.mainPackage = mainPackage;
+  }
 }

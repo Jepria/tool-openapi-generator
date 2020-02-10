@@ -19,24 +19,13 @@ public abstract class DefaultGenerator implements Generator {
 
   private Map<String, String> values;
 
-  private String specLocation;
-
   private String templateFileName;
 
-  public OpenAPI getOpenAPI() {
-    return openAPI;
-  }
+  private String mainPackage;
 
   private OpenAPI openAPI;
 
-  public DefaultGenerator(String specLocation) {
-    this.specLocation = specLocation;
-    this.openAPI      = new OpenAPIV3Parser().read(specLocation);
-  }
-
-  public DefaultGenerator(OpenAPI openAPI) {
-    this.openAPI = openAPI;
-  }
+  private String fileExtension = ".java";
 
   public void saveToFiles(String rootLocation) throws IOException {
 
@@ -46,7 +35,7 @@ public abstract class DefaultGenerator implements Generator {
 
         new java.io.File(rootLocation).mkdirs();
 
-        File file = new File(rootLocation + adapterName + ".java");
+        File file = new File(rootLocation + adapterName + fileExtension);
         if (file.exists()) {
           file.delete();
         }
@@ -68,10 +57,6 @@ public abstract class DefaultGenerator implements Generator {
     return templateFileName;
   }
 
-  public String getSpecLocation() {
-    return specLocation;
-  }
-
   public void setTemplateFileName(String templateFileName) {
     this.templateFileName = templateFileName;
   }
@@ -83,5 +68,29 @@ public abstract class DefaultGenerator implements Generator {
     templateSource.close();
 
     return template.execute(dto).replace(", )", ")");
+  }
+
+  public void setMainPackage(String mainPackage) {
+    this.mainPackage = mainPackage;
+  }
+
+  public String getMainPackage() {
+    return mainPackage;
+  }
+
+  public OpenAPI getOpenAPI() {
+    return this.openAPI;
+  }
+
+  public void setOpenAPI(OpenAPI openAPI) {
+    this.openAPI = openAPI;
+  }
+
+  public void setOpenAPI(String openAPILocation) {
+    this.openAPI = new OpenAPIV3Parser().read(openAPILocation);
+  }
+
+  public void setFileExtension(String fileExtension) {
+    this.fileExtension = fileExtension;
   }
 }

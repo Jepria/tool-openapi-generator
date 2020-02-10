@@ -3,7 +3,7 @@ package org.jepria.tools.openapi.generator.languages.jersey;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class DtoGeneratorTest {
+class FieldNamesGeneratorTest {
 
   @Test
   void createTest() throws IOException {
@@ -12,12 +12,11 @@ class DtoGeneratorTest {
     String specTest     = "d:\\work\\tool-openapi-generator\\modules\\tool-openapi-generator\\src\\main\\resources\\spec\\swagger.json";
     String specLocation = specShowcase;
 
-    String outputFolder = new java.io.File(".").getCanonicalPath() + "\\temp\\DtoGeneratorTest\\";
+    String outputFolder = new java.io.File(".").getCanonicalPath() + "\\temp\\FieldNamesGeneratorTest\\";
+    FieldNamesGenerator generator = new FieldNamesGenerator(specLocation);
 
-    DtoGenerator generator = new DtoGenerator(specLocation);
     generator.create();
     generator.saveToFiles(outputFolder);
 
   }
-
 }
