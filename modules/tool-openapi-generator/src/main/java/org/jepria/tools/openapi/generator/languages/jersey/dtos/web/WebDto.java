@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.web;
+package org.jepria.tools.openapi.generator.languages.jersey.dtos.web;
 
 public class WebDto {
   private String mainPackage;

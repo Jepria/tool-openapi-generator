@@ -29,9 +29,9 @@ import javax.ws.rs.*;
 
 public class {{className}}JaxrsAdapter  {
 
-protected final EntityEndpointAdapter entityEndpointAdapter = new EntityEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getEntityService());
+  protected final EntityEndpointAdapter entityEndpointAdapter = new EntityEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getEntityService());
 
-protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getSearchService(() -> request.getSession()));
+  protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpointAdapter(() -> {{className}}ServerFactory.getInstance().getSearchService(() -> request.getSession()));
 
 {{#operations}}
   {{#operation}}

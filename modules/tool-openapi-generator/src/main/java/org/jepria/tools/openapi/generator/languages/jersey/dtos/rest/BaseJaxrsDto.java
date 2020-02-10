@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.rest;
+package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jepria.tools.openapi.generator.languages.jersey.rest.operations.CrudJaxrsOperation;
-import org.jepria.tools.openapi.generator.languages.jersey.rest.operations.OtherJaxrsOperation;
-import org.jepria.tools.openapi.generator.languages.jersey.rest.operations.SearchJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.CrudJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.SearchJaxrsOperation;
 import org.jepria.tools.openapi.generator.utils.StringUtils;
 
 public class BaseJaxrsDto {

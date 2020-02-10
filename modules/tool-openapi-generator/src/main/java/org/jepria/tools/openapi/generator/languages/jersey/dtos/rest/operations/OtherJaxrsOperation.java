@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.rest.operations;
+package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations;
 
 import io.swagger.v3.oas.models.Operation;
 

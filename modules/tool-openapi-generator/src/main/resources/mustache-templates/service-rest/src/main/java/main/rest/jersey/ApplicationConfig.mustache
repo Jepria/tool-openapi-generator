@@ -1,8 +1,9 @@
-package {{apiPackage}}.main.rest.jersey;
+package {{mainPackage}}.main.rest.jersey;
 
 import com.technology.jep.jepria.shared.exceptions.ApplicationException;
-import {{apiPackage}}.feature.rest.FeatureJaxrsAdapter;
-import {{apiPackage}}.featureprocess.rest.FeatureProcessJaxrsAdapter;
+{{#adapters}}
+import {{apiPackage}}.{{className}}JaxrsAdapter;
+{{/adapters}}  
 import org.jepria.server.service.rest.jersey.ApplicationConfigBase;
 
 import javax.ws.rs.core.Response;
@@ -14,7 +15,7 @@ public class ApplicationConfig extends ApplicationConfigBase {
   
   public ApplicationConfig() {
     {{#adapters}}
-    register({{adapterName}}JaxrsAdapter.class);
+    register({{className}}JaxrsAdapter.class);
     {{/adapters}}   
 
     register(new ExceptionMapper<ApplicationException>() {

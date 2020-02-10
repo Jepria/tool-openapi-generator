@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey;
+package org.jepria.tools.openapi.generator.languages.jersey.generators;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;

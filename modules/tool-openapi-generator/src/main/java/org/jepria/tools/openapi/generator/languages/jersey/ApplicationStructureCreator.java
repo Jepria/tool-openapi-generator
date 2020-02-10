@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.WebGenerator;
 
 class ApplicationStructureCreator {
 
@@ -43,7 +47,10 @@ class ApplicationStructureCreator {
 
   private void createAdapters(OpenAPI spec, String outputFolder) throws IOException {
     JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(spec);
+//    generator.setMainPackage();
+    generator.getValues();
     generator.create();
+
     generator.saveToFiles(outputFolder);
   }
 
@@ -55,6 +62,13 @@ class ApplicationStructureCreator {
 
   private void createDtos(OpenAPI spec, String outputFolder) throws IOException {
     DtoGenerator generator = new DtoGenerator(spec);
+    generator.create();
+    generator.saveToFiles(outputFolder);
+  }
+
+  private void createWeb(String outputFolder) throws IOException {
+    WebGenerator generator = new WebGenerator();
+    generator.setMainPackage("org.jepria.rfi");
     generator.create();
     generator.saveToFiles(outputFolder);
   }

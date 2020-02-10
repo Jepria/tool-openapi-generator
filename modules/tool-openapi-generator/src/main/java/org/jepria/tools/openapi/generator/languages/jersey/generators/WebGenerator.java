@@ -1,10 +1,10 @@
-package org.jepria.tools.openapi.generator.languages.jersey;
+package org.jepria.tools.openapi.generator.languages.jersey.generators;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.web.WebDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.web.WebDto;
 
 public class WebGenerator extends DefaultGenerator {
 

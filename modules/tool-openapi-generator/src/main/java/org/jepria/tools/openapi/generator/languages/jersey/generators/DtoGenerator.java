@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey;
+package org.jepria.tools.openapi.generator.languages.jersey.generators;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.model.ModelDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.model.ModelDto;
 
 public class DtoGenerator extends DefaultGenerator {
 

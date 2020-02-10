@@ -1,10 +1,9 @@
-package org.jepria.tools.openapi.generator.languages.jersey.rest.operations;
+package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations;
 
 import static org.jepria.tools.openapi.generator.utils.SchemaUtils.getSchemaType;
 import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;
 
 import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.ArrayList;

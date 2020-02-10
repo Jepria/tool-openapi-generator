@@ -1,12 +1,10 @@
 package org.jepria.tools.openapi.generator.languages.jersey;
 
 import java.io.IOException;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApplicationStructureCreatorTest {
-
-  @Ignore
+  
   @Test
   public void create() throws IOException {
     String outputFolder = new java.io.File(".").getCanonicalPath() + "\\out\\";

@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.model;
+package org.jepria.tools.openapi.generator.languages.jersey.dtos.model;
 
 import static org.jepria.tools.openapi.generator.utils.SchemaUtils.refToName;
 import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;

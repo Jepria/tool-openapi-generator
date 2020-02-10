@@ -62,7 +62,13 @@ public abstract class DefaultGenerator implements Generator {
   }
 
   protected String fillTemplate(Object dto) throws IOException {
+
+    if (null == getClass().getResourceAsStream(this.getTemplateFileName())) {
+      throw new IOException("Cannot get template file");
+    }
+
     Reader templateSource = new InputStreamReader(getClass().getResourceAsStream(this.getTemplateFileName()));
+
 
     Template template = Mustache.compiler().escapeHTML(false).compile(templateSource);
     templateSource.close();
