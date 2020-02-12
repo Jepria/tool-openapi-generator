@@ -6,8 +6,9 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.jepria.tools.openapi.generator.languages.jersey.JaxrsAdapterGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.ApplicationStructureCreator;
 
 public class GeneratorCli {
 
@@ -24,6 +25,7 @@ public class GeneratorCli {
   private static final String GEN_OPT_NAME = "generate";
   public static final  String GEN_TESTS    = "tests";
   public static final  String GEN_REST     = "rest";
+  public static final  String GEN_PROJECT  = "proj";
 
 
   public static void main(String[] args) throws ParseException, IOException {
@@ -71,8 +73,16 @@ public class GeneratorCli {
       } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_TESTS)) {
         System.out.println("Generate tests for rest adapters...");
         JaxrsAdapterTestGenerator adapterTestGen = new JaxrsAdapterTestGenerator(specPath);
+        if (null != mainPackage) {
+          adapterTestGen.setMainPackage(mainPackage);
+        }
         adapterTestGen.create();
         adapterTestGen.saveToFiles(outputPath);
+      } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_PROJECT)) {
+        System.out.println("Generate project...");
+        ApplicationStructureCreator creator = new ApplicationStructureCreator(outputPath);
+        creator.setBasePackage(mainPackage);
+        creator.create(specPath);
       }
     } else {
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 public class ApplicationStructureCreatorTest {
-  
+
   @Test
   public void create() throws IOException {
     String outputFolder = new java.io.File(".").getCanonicalPath() + "\\out\\";
@@ -15,6 +15,7 @@ public class ApplicationStructureCreatorTest {
 
     ApplicationStructureCreator structureCreator = new ApplicationStructureCreator(outputFolder);
 
+    structureCreator.setBasePackage("com.technology.rfi");
     structureCreator.create(specLocation);
 
 

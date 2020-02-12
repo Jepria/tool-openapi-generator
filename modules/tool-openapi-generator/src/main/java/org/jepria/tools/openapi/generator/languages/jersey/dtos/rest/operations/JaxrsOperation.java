@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import org.jepria.tools.openapi.generator.utils.SchemaUtils;
 
 public class JaxrsOperation {
 
@@ -95,7 +96,7 @@ public class JaxrsOperation {
     if (null != operation.getParameters()) {
       for (io.swagger.v3.oas.models.parameters.Parameter parameter : operation
           .getParameters()) {
-        this.allParams.add(new Parameter(parameter.getName(), parameter.getSchema().getType(), inToJerseyAnnotation(parameter.getIn()), parameter.getName()));
+        this.allParams.add(new Parameter(parameter.getName(), getSchemaType(parameter.getSchema()), inToJerseyAnnotation(parameter.getIn()), parameter.getName()));
       }
     }
     Parameter parameter = this.getBodyParams(operation);
@@ -129,7 +130,7 @@ public class JaxrsOperation {
       if (null != operation.getRequestBody().getContent()) {
 
         for (MediaType type : operation.getRequestBody().getContent().values()) {
-          String paramName = paramNameFromRef(type.getSchema().get$ref());
+          String paramName = SchemaUtils.refToName(type.getSchema().get$ref());//paramNameFromRef(type.getSchema().get$ref());
           if (null != paramName) {
             parameter = new Parameter(paramName, paramName);
           }
@@ -147,14 +148,14 @@ public class JaxrsOperation {
 
   private String getReturnType(Operation operation) {
     String returnType = null;
+
     if (null != operation.getResponses().get("200") &&
         null != operation.getResponses().get("200").getContent()) {
       Schema schema = operation.getResponses().get("200").getContent().values().iterator().next().getSchema();
       returnType = getSchemaType(schema);
-      return returnType;
-    } else {
-      return null;
     }
+
+    return returnType;
   }
 
 

@@ -16,6 +16,7 @@ public class JaxrsAdapterGenerator extends DefaultGenerator {
   public JaxrsAdapterGenerator(OpenAPI openAPI) {
     this.setOpenAPI(openAPI);
     setTemplateFileName(TEMPLATE_FILE_NAME);
+    setBaseName("JaxrsAdapter");
   }
 
   public JaxrsAdapterGenerator(String specLocation) {
@@ -33,16 +34,26 @@ public class JaxrsAdapterGenerator extends DefaultGenerator {
     }
 
     for (BaseJaxrsDto dto : list) {
-      dto.setModelPackage(this.getMainPackage() + ".dto");
-      dto.setMainPackage(this.getMainPackage());
+      dto.setModelPackage(this.getMainPackage() + "." + dto.getClassName().toLowerCase() + ".dto");
+      dto.setMainPackage(this.getMainPackage() + "." + dto.getClassName().toLowerCase());
       dto.setApiPackage(this.getMainPackage() + "." + dto.getClassName().toLowerCase() + ".rest");
+
       try {
-        map.put(dto.getClassName() + "JaxrsAdapter", this.fillTemplate(dto));
+        map.put(dto.getClassName(), this.fillTemplate(dto));
+        dto.setTemplate(this.getTemplateFileName());
+        dto.fillTemplate();
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
 
+    this.setDtos(list);
     this.setValues(map);
+  }
+
+  @Override
+  public void saveToFiles(String rootLocation) throws IOException {
+
+    super.saveToFiles(rootLocation);
   }
 }

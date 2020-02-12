@@ -32,7 +32,7 @@ public class ModelDto {
 
     Map<String, Schema> schemas = spec.getComponents().getSchemas();
     for (String className : schemas.keySet()) {
-      if (isSystem(className)){
+      if (isSystem(className)) {
         continue;
       }
       ModelDto dto = new ModelDto();
@@ -83,7 +83,7 @@ public class ModelDto {
     return className;
   }
 
-  private static boolean isSystem(String className){
+  private static boolean isSystem(String className) {
     boolean result = false;
 
     List<String> systemList = new ArrayList<>();

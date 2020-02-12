@@ -10,20 +10,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.CrudJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.SearchJaxrsOperation;
 import org.jepria.tools.openapi.generator.utils.StringUtils;
 
-public class BaseJaxrsDto {
+public class BaseJaxrsDto extends BaseDtoImpl {
 
   private String  apiPackage;
   private String  modelPackage;
   private String  mainPackage;
   private String  className;
   private String  rootPath;
-  private boolean hasCrud      = false;
-  private boolean hasSearch    = false;
+  private boolean hasCrud   = false;
+  private boolean hasSearch = false;
 
   private List<OtherJaxrsOperation>  operations       = new ArrayList<>();
   private List<CrudJaxrsOperation>   crudOperations   = new ArrayList<>();
@@ -158,7 +159,7 @@ public class BaseJaxrsDto {
   private void addOperation(String httpMethod, String path, Operation operation) {
     String operationName = operation.getOperationId();
 
-    if (null == operationName){
+    if (null == operationName) {
       System.out.println("Can't set operationName for operation: " + httpMethod + " " + path);
     }
 
@@ -183,4 +184,10 @@ public class BaseJaxrsDto {
   public void setMainPackage(String mainPackage) {
     this.mainPackage = mainPackage;
   }
+
+
+  public List<OtherJaxrsOperation> getOperations() {
+    return operations;
+  }
+
 }

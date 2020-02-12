@@ -6,15 +6,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServerFactoryDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServiceDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.ApplicationConfigGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.WebGenerator;
 
-class ApplicationStructureCreator {
+public class ApplicationStructureCreator {
 
   private String apiSpecFolder = "api-spec";
   private String outputFolderName;
+  private String basePackage   = "";
 
   List<String> folders = new ArrayList<>();
 
@@ -33,10 +41,11 @@ class ApplicationStructureCreator {
     File file = new File(outputFolderName);
 
     Boolean check = file.mkdir();
-    createAdapters(openAPI, this.outputFolderName + "rest\\");
-    createAdapterTests(openAPI, this.outputFolderName + "test\\");
-    createDtos(openAPI, this.outputFolderName + "dto\\");
-
+    createAdapters(openAPI, this.outputFolderName + "src\\main\\java\\");
+    createAdapterTests(openAPI, this.outputFolderName + "src\\test\\java");
+//    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
+    createWeb(this.outputFolderName + "src\\main\\webapp\\WEB-INF\\");
+    createApplicationConfig(openAPI, this.outputFolderName + "src\\main\\java\\");
     return false;
   }
 
@@ -46,12 +55,22 @@ class ApplicationStructureCreator {
   }
 
   private void createAdapters(OpenAPI spec, String outputFolder) throws IOException {
-    JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(spec);
-//    generator.setMainPackage();
-    generator.getValues();
-    generator.create();
+    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\";
 
-    generator.saveToFiles(outputFolder);
+    JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(spec);
+    generator.setMainPackage(this.getBasePackage());
+    generator.create();
+    List<? extends BaseDtoImpl> dtos = generator.getDtos();
+    for (BaseDtoImpl dto : dtos) {
+      String entityFolder = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
+      String entityPackage = this.getBasePackage() + "." + ((BaseJaxrsDto) dto).getClassName().toLowerCase();
+      dto.saveToFile(entityFolder + "rest\\" + ((BaseJaxrsDto) dto).getClassName() + "JaxrsAdapter.java");
+      createServerFactory(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
+      createService(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder );
+      createDao(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder + "dao\\");
+      createDtos(spec, entityFolder + "dto\\");
+    }
+
   }
 
   private void createAdapterTests(OpenAPI spec, String outputFolder) throws IOException {
@@ -68,10 +87,51 @@ class ApplicationStructureCreator {
 
   private void createWeb(String outputFolder) throws IOException {
     WebGenerator generator = new WebGenerator();
-    generator.setMainPackage("org.jepria.rfi");
+    generator.setMainPackage(this.getBasePackage());
     generator.create();
     generator.saveToFiles(outputFolder);
   }
 
+  private void createApplicationConfig(OpenAPI spec, String outputFolder) throws IOException {
+    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\" + "main\\rest\\";
+    ApplicationConfigGenerator generator = new ApplicationConfigGenerator(spec);
+    generator.setMainPackage(this.getBasePackage());
+    generator.create();
+    generator.saveToFiles(outputFolder);
+  }
+
+  private void createServerFactory(String apiPackage, String className, String outputFolder) throws IOException {
+    ServerFactoryDto dto = new ServerFactoryDto();
+    dto.setApiPackage(apiPackage);
+    dto.setClassName(className);
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + className + "ServerFactory.java");
+  }
+
+  private void createService(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+    ServiceDto dto = new ServiceDto();
+    dto.setApiPackage(apiPackage);
+    dto.setClassName(className);
+    dto.setOperations(operations);
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + className + "Service.java");
+  }
+
+  private void createDao(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+    DaoDto dto = new DaoDto();
+    dto.setApiPackage(apiPackage);
+    dto.setClassName(className);
+    dto.setOperations(operations);
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + className + "Dao.java");
+  }
+
+  public void setBasePackage(String basePackage) {
+    this.basePackage = basePackage;
+  }
+
+  public String getBasePackage() {
+    return basePackage;
+  }
 
 }

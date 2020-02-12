@@ -1,12 +1,25 @@
-package com.technology.jep.jepriashowcase.feature.dao;
+package {{apiPackage}}.dao;
 
 import org.jepria.server.data.Dao;
 import org.jepria.server.data.OptionDto;
 
 import java.util.List;
 
-public interface FeatureDao extends Dao {
-  void setFeatureResponsible(Integer featureId, Integer responsibleId, Integer operatorId);
-  List<OptionDto<Integer>> getFeatureOperator();
-  List<OptionDto<String>> getFeatureStatus();
+public interface {{className}}Dao extends Dao {
+  {{#operations}}
+  {{#operation}}
+  {{#isGet}}
+  {{returnType}} {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}});
+  {{/isGet}}
+  {{#isPut}}
+  void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}});
+  {{/isPut}}
+  {{#isPost}}
+  void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}});
+  {{/isPost}}
+  {{#isDelete}}
+  void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}});
+  {{/isDelete}}
+  {{/operation}}
+  {{/operations}}
 }

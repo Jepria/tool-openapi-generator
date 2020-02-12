@@ -16,8 +16,10 @@ public class SchemaUtils {
   public static String getSchemaType(Schema schema){
     String returnType = null;
     if (schema instanceof ArraySchema) {
-      returnType = "List ";
-      returnType = returnType + refToName(((ArraySchema) schema).getItems().get$ref());
+      returnType = "List<" + refToName(((ArraySchema) schema).getItems().get$ref()) + ">";
+//      returnType = returnType + refToName(((ArraySchema) schema).getItems().get$ref());
+    } else {
+      returnType = schema.getType();
     }
     //TODO: another instances
     return returnType;
