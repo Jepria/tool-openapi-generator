@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.jepria.tools.openapi.generator.languages.jersey.JaxrsAdapterGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
 
 public class ProjectGenerator {
 

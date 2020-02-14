@@ -1,0 +1,62 @@
+package {{apiPackage}}.dao;
+
+import java.util.List;
+import java.util.Map;
+import org.jepria.server.data.OptionDto;
+
+public class {{className}}DaoImpl implements {{className}}Dao {
+
+{{#operations}}
+  {{#operation}}
+  {{#isGet}}
+  @Override
+  public {{returnType}} {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+    return null;
+  }
+  {{/isGet}}
+  {{#isPut}}
+  @Override
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+  
+  }
+  {{/isPut}}
+  {{#isPost}}
+  @Override
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+
+  }
+  {{/isPost}}
+  {{#isDelete}}
+  @Override
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+  
+  }
+  {{/isDelete}}
+  {{/operation}}
+
+{{/operations}}
+  @Override
+  public List<?> find(Object o, Integer integer) {
+    return null;
+  }
+
+  @Override
+  public List<?> findByPrimaryKey(Map<String, ?> map, Integer integer) {
+    return null;
+  }
+
+  @Override
+  public Object create(Object o, Integer integer) {
+    return null;
+  }
+
+  @Override
+  public void update(Map<String, ?> map, Object o, Integer integer) {
+
+  }
+
+  @Override
+  public void delete(Map<String, ?> map, Integer integer) {
+
+  }
+}

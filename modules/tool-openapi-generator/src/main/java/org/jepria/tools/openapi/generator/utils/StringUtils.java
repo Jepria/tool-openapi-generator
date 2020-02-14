@@ -105,4 +105,31 @@ public class StringUtils {
     }
     return name;
   }
+
+  /**
+   * Underscore the given word.
+   * Copied from Twitter elephant bird
+   * https://github.com/twitter/elephant-bird/blob/master/core/src/main/java/com/twitter/elephantbird/util/Strings.java
+   *
+   * @param word The word
+   * @return The underscored version of the word
+   */
+  public static String underscore(final String word) {
+    String firstPattern = "([A-Z]+)([A-Z][a-z])";
+    String secondPattern = "([a-z\\d])([A-Z])";
+    String replacementPattern = "$1_$2";
+    // Replace package separator with slash.
+    String result = word.replaceAll("\\.", "/");
+    // Replace $ with two underscores for inner classes.
+    result = result.replaceAll("\\$", "__");
+    // Replace capital letter with _ plus lowercase letter.
+    result = result.replaceAll(firstPattern, replacementPattern);
+    result = result.replaceAll(secondPattern, replacementPattern);
+    result = result.replace('-', '_');
+    // replace space with underscore
+    result = result.replace(' ', '_');
+    result = result.toLowerCase(Locale.ROOT);
+    return result;
+  }
+
 }

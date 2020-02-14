@@ -1,0 +1,11 @@
+package com.technology.jep.jepriashowcase.feature;
+ 
+import com.technology.jep.jepria.shared.field.JepRecordFieldNames;
+
+public class {{className}} extends JepRecordFieldNames {  
+{{#fields}}
+  {{#field}}
+  public static final String {{Name}} = "{{name}}";
+  {{/field}}
+{{/fields}}     
+}
