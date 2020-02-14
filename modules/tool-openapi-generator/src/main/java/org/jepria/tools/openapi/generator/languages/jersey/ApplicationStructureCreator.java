@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoImplDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.RecordDefinitionDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServerFactoryDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServiceDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.BaseJaxrsDto;
@@ -62,13 +64,15 @@ public class ApplicationStructureCreator {
     generator.create();
     List<? extends BaseDtoImpl> dtos = generator.getDtos();
     for (BaseDtoImpl dto : dtos) {
-      String entityFolder = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
+      String entityFolder  = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
       String entityPackage = this.getBasePackage() + "." + ((BaseJaxrsDto) dto).getClassName().toLowerCase();
       dto.saveToFile(entityFolder + "rest\\" + ((BaseJaxrsDto) dto).getClassName() + "JaxrsAdapter.java");
       createServerFactory(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
-      createService(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder );
+      createService(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder);
       createDao(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder + "dao\\");
+      createDaoImpl(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder + "dao\\");
       createDtos(spec, entityFolder + "dto\\");
+      createRecordDefinition(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
     }
 
   }
@@ -124,6 +128,23 @@ public class ApplicationStructureCreator {
     dto.setOperations(operations);
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "Dao.java");
+  }
+
+  private void createDaoImpl(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+    DaoImplDto dto = new DaoImplDto();
+    dto.setApiPackage(apiPackage);
+    dto.setClassName(className);
+    dto.setOperations(operations);
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + className + "DaoImpl.java");
+  }
+
+  private void createRecordDefinition(String apiPackage, String className, String outputFolder) throws IOException {
+    RecordDefinitionDto dto = new RecordDefinitionDto();
+    dto.setApiPackage(apiPackage);
+    dto.setClassName(className);
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + className + "RecordDefinition.java");
   }
 
   public void setBasePackage(String basePackage) {

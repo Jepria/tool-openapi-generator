@@ -1,268 +1,62 @@
 package {{apiPackage}}.dao;
 
-import com.technology.jep.jepria.server.dao.ResultSetMapper;
-
-import com.technology.jep.jepriashowcase.feature.{{className}}FieldNames;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}CreateDto;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}Dto;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}SearchDto;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}UpdateDto;
-
-import org.jepria.server.data.DaoSupport;
-import org.jepria.server.data.DtoUtil;
-import org.jepria.server.data.OptionDto;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import org.jepria.server.data.OptionDto;
 
 public class {{className}}DaoImpl implements {{className}}Dao {
 
-
+{{#operations}}
+  {{#operation}}
+  {{#isGet}}
   @Override
-  public List<{{className}}Dto> find(Object template, Integer operatorId) {
-
-    {{className}}SearchDto searchTemplate = ({{className}}SearchDto) template;
-
-    final List<{{className}}Dto> records;
-
-    records = DaoSupport.getInstance().find(findSqlQuery,
-            new {{className}}ResultSetMapper()
-            , {{className}}Dto.class
-            , searchTemplate.get{{className}}Id()
-            , DtoUtil.like(searchTemplate.get{{className}}NameTemplate())
-            , DtoUtil.like(searchTemplate.get{{className}}NameEnTemplate())
-            , null
-            , null
-            , searchTemplate.getDateInsFrom()
-            , searchTemplate.getDateInsTo()
-            , searchTemplate.getAuthorId()
-            , searchTemplate.getResponsibleId()
-            , DtoUtil.convertList(searchTemplate.getStatusCodeList())
-            , searchTemplate.getMaxRowCount()
-            , operatorId);
-
-    // download descriptions for each record
-    if (records != null) {
-      records.forEach(record -> {
-        String description = downloadDescription(record.get{{className}}Id());
-        record.setDescription(description);
-      });
-    }
-
-    return records;
+  public {{returnType}} {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+    return null;
   }
-
+  {{/isGet}}
+  {{#isPut}}
   @Override
-  public List<{{className}}Dto> findByPrimaryKey(Map<String, ?> primaryKeyMap, Integer operatorId) {
-
-    final List<{{className}}Dto> records;
-
-    records = DaoSupport.getInstance().find(findSqlQuery,
-            new {{className}}ResultSetMapper()
-            , {{className}}Dto.class
-            , primaryKeyMap.get({{className}}FieldNames.FEATURE_ID)
-            , null
-            , null
-            , null
-            , null
-            , null
-            , null
-            , null
-            , null
-            , null
-            , null
-            , operatorId);
-
-    // download descriptions for each record
-    if (records != null) {
-      records.forEach(record -> {
-        String description = downloadDescription(record.get{{className}}Id());
-        record.setDescription(description);
-      });
-    }
-
-    return records;
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+  
   }
+  {{/isPut}}
+  {{#isPost}}
+  @Override
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
 
-  private static final String findSqlQuery = "begin  "
-          + "? := pkg_jepriashowcase.find{{className}}("
-          + "featureid => ? "
-          + ", featureName => ? "
-          + ", featureNameEn => ? "
-          + ", workSequenceFrom => ? "
-          + ", workSequenceTo => ? "
-          + ", dateInsFrom => ? "
-          + ", dateInsTo => ? "
-          + ", authorid => ? "
-          + ", responsibleId => ? "
-          + ", featureStatusCodeList => ? "
-          + ", maxRowCount => ? "
-          + ", operatorId => ? "
-          + ");"
-          + " end;";
+  }
+  {{/isPost}}
+  {{#isDelete}}
+  @Override
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+  
+  }
+  {{/isDelete}}
+  {{/operation}}
 
-  protected static class {{className}}ResultSetMapper extends ResultSetMapper<{{className}}Dto> {
-    @Override
-    public void map(ResultSet rs, {{className}}Dto record) throws SQLException {
-      record.set{{className}}Id(getInteger(rs, {{className}}FieldNames.FEATURE_ID));
-      record.set{{className}}Name(rs.getString({{className}}FieldNames.FEATURE_NAME));
-      record.set{{className}}NameEn(rs.getString({{className}}FieldNames.FEATURE_NAME_EN));
-      record.setDateIns(getDate(rs, {{className}}FieldNames.DATE_INS));
-
-      OptionDto<String> featureStatus = new OptionDto<>();
-      featureStatus.setName(rs.getString({{className}}FieldNames.FEATURE_STATUS_NAME));
-      featureStatus.setValue(rs.getString({{className}}FieldNames.FEATURE_STATUS_CODE));
-      record.set{{className}}Status(featureStatus);
-
-      OptionDto<Integer> author = new OptionDto<>();
-      author.setName(rs.getString({{className}}FieldNames.AUTHOR_NAME));
-      author.setValue(getInteger(rs, {{className}}FieldNames.AUTHOR_ID));
-      record.setAuthor(author);
-
-      OptionDto<Integer> responsible = new OptionDto<>();
-      responsible.setName(rs.getString({{className}}FieldNames.RESPONSIBLE_NAME));
-      responsible.setValue(getInteger(rs, {{className}}FieldNames.RESPONSIBLE_ID));
-      record.setResponsible(responsible);
-    }
+{{/operations}}
+  @Override
+  public List<?> find(Object o, Integer integer) {
+    return null;
   }
 
   @Override
-  public Object create(Object record, Integer operatorId) {
-    {{className}}CreateDto dto = ({{className}}CreateDto) record;
-
-    String sqlQuery =
-            "begin  "
-                    + "? := pkg_jepriashowcase.create{{className}}("
-                    + "featureName => ? "
-                    + ", featureNameEn => ? "
-                    + ", operatorId => ? "
-                    + ");"
-                    + " end;";
-
-    final Integer featureId;
-
-    featureId = DaoSupport.getInstance().create(
-            sqlQuery
-            , Integer.class
-            , dto.get{{className}}Name()
-            , dto.get{{className}}NameEn()
-            , operatorId);
-
-    uploadDescription(featureId, dto.getDescription());
-
-    return featureId;
-  }
-
-  protected void uploadDescription(Integer featureId, String description) {
-    DaoSupport.getInstance().uploadClob("v_jrs_feature_lob", "description", {{className}}FieldNames.FEATURE_ID + "=" + featureId, description);
-  }
-
-  protected String downloadDescription(Integer featureId) {
-    String description = DaoSupport.getInstance().downloadClob("v_jrs_feature_lob", "description", {{className}}FieldNames.FEATURE_ID + "=" + featureId);
-    description = "".equals(description) ? null : description;
-    return description;
+  public List<?> findByPrimaryKey(Map<String, ?> map, Integer integer) {
+    return null;
   }
 
   @Override
-  public void update(Map<String, ?> primaryKey, Object record, Integer operatorId) {
+  public Object create(Object o, Integer integer) {
+    return null;
+  }
 
-    {{className}}UpdateDto dto = ({{className}}UpdateDto) record;
-
-    String sqlQuery =
-            "begin "
-                    + "pkg_jepriashowcase.update{{className}}("
-                    + "featureId => ? "
-                    + ", featureName => ? "
-                    + ", featureNameEn => ? "
-                    + ", operatorId => ? "
-                    + ");"
-                    + "end;";
-
-    final Integer featureId = (Integer)primaryKey.get({{className}}FieldNames.FEATURE_ID);
-
-    DaoSupport.getInstance().update(sqlQuery
-            , featureId
-            , dto.get{{className}}Name()
-            , dto.get{{className}}NameEn()
-            , operatorId);
-
-    uploadDescription(featureId, dto.getDescription());
-
-    set{{className}}Responsible(featureId, dto.getResponsibleId(), operatorId);
+  @Override
+  public void update(Map<String, ?> map, Object o, Integer integer) {
 
   }
 
   @Override
-  public void delete(Map<String, ?> primaryKey, Integer operatorId) {
-    String sqlQuery =
-            "begin "
-                    + "pkg_jepriashowcase.delete{{className}}("
-                    + "featureId => ? "
-                    + ", operatorId => ? "
-                    + ");"
-                    + "end;";
+  public void delete(Map<String, ?> map, Integer integer) {
 
-    DaoSupport.getInstance().delete(sqlQuery
-            , primaryKey.get({{className}}FieldNames.FEATURE_ID)
-            , operatorId);
-  }
-
-  @Override
-  public void set{{className}}Responsible(Integer featureId, Integer responsibleId, Integer operatorId) {
-    String sqlQuery =
-            "begin "
-                    + "pkg_jepriashowcase.set{{className}}Responsible("
-                    + "featureId => ? "
-                    + ", responsibleId => ? "
-                    + ", operatorId => ? "
-                    + ");"
-                    + "end;";
-
-    DaoSupport.getInstance().execute(sqlQuery
-            , featureId
-            , responsibleId
-            , operatorId);
-  }
-
-  @Override
-  public List<OptionDto<Integer>> get{{className}}Operator() {
-    String sqlQuery =
-            " begin "
-                    + " ? := pkg_jepriashowcase.find{{className}}Operator("
-                    + "featureOperatorId => null "
-                    + ", featureOperatorName => null "
-                    + ", maxRowCount => null "
-                    + ", operatorId => null "
-                    + ");"
-                    + " end;";
-    return DaoSupport.getInstance().find(sqlQuery,
-            new ResultSetMapper<OptionDto<Integer>>() {
-              @Override
-              public void map(ResultSet rs, OptionDto<Integer> dto) throws SQLException {
-                dto.setName(rs.getString({{className}}FieldNames.FEATURE_OPERATOR_NAME));
-                dto.setValue(getInteger(rs, {{className}}FieldNames.FEATURE_OPERATOR_ID));
-              }
-            },
-            OptionDto.class);
-  }
-
-  @Override
-  public List<OptionDto<String>> get{{className}}Status() {
-    String sqlQuery =
-            " begin "
-                    + " ? := pkg_jepriashowcase.get{{className}}Status;"
-                    + " end;";
-
-    return DaoSupport.getInstance().find(sqlQuery,
-            new ResultSetMapper<OptionDto<String>>() {
-              @Override
-              public void map(ResultSet rs, OptionDto<String> dto) throws SQLException {
-                dto.setName(rs.getString({{className}}FieldNames.FEATURE_STATUS_NAME));
-                dto.setValue(rs.getString({{className}}FieldNames.FEATURE_STATUS_CODE));
-              }
-            },
-            OptionDto.class);
   }
 }

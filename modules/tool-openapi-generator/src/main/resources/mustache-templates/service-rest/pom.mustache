@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jepria.jepriashowcase</groupId>
-  <artifactId>jepriashowcase-service-rest</artifactId>
+  <groupId>{{basePackage}}</groupId>
+  <artifactId>{{applicationName}}</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>service-rest Maven Webapp</name>
@@ -227,31 +227,8 @@
             </configuration>
           </execution>
 
-          <!--execution>
-            <id>purge-snapshot-dependencies</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>purge-local-repository</goal>
-            </goals>
-            <configuration>
-              <snapshotsOnly>true</snapshotsOnly>
-              <reResolve>true</reResolve>
-              <includes>
-                <include>org.jepria:jepria</include>
-              </includes>
-            </configuration>
-          </execution-->
         </executions>
       </plugin>
-
-      <!--plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
-        <configuration>
-          <useIncrementalCompilation>false</useIncrementalCompilation>
-        </configuration>
-      </plugin-->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -404,22 +381,6 @@
           </execution>
         </executions>
       </plugin>
-
-      <!--plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-        <excludeDefaultDirectories>true</excludeDefaultDirectories>
-        <filesets>
-          <fileset>
-            <directory>${project.build.directory}</directory>
-            <excludes>
-              <exclude>*.war</exclude>
-            </excludes>
-          </fileset>
-        </filesets>
-        </configuration>
-      </plugin-->
 
     </plugins>	
   </build>
