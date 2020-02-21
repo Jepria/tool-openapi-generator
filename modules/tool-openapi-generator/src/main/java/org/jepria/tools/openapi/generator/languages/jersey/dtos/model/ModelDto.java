@@ -40,31 +40,18 @@ public class ModelDto {
       Schema schema = schemas.get(className);
 
       List<ModelField> fields = new ArrayList<>();
-      for (Object fieldName : schema.getProperties().keySet()) {
-        ModelField dtoField = null;
-        if (schema.getProperties().get(fieldName) instanceof StringSchema) {
-          sanitizeName(fieldName.toString());
-          underscore(fieldName.toString());
-          dtoField = new ModelField(fieldName.toString(), "String");
-        } else if (schema.getProperties().get(fieldName) instanceof IntegerSchema) {
-          dtoField = new ModelField(fieldName.toString(), "Integer");
-        } else if (schema.getProperties().get(fieldName) instanceof DateSchema) {
-          dtoField = new ModelField(fieldName.toString(), "Date");
-        } else if (schema.getProperties().get(fieldName) instanceof DateTimeSchema) {
-          dtoField = new ModelField(fieldName.toString(), "DateTime");
-        } else if (schema.getProperties().get(fieldName) instanceof ObjectSchema) {
-          ((ObjectSchema) schema.getProperties().get(fieldName)).getType();
-          dtoField = new ModelField(fieldName.toString(), "Object");
-          ((ObjectSchema) schema.getProperties().get(fieldName)).get$ref();
-        } else if (schema.getProperties().get(fieldName) instanceof ArraySchema) {
-          ((ArraySchema) schema.getProperties().get(fieldName)).getItems();
-          dtoField = new ModelField(fieldName.toString(), "Array");
-        } else {
-          dtoField = new ModelField(fieldName.toString(), refToName(((Schema) schema.getProperties().get(fieldName)).get$ref()));
-        }
 
-        if (null != dtoField) {
-          fields.add(dtoField);
+      if (schema instanceof ArraySchema) {
+        ModelField dtoField = new ModelField("list", "List<" +  refToName(((ArraySchema) schema).getItems().get$ref()) + ">");
+        fields.add(dtoField);
+      } else if (null != schema.getProperties()) {
+        for (Object fieldName : schema.getProperties().keySet()) {
+          ModelField dtoField = null;
+          dtoField = new ModelField(fieldName.toString(), getTypeNameFromSchema((Schema) schema.getProperties().get(fieldName)));
+
+          if (null != dtoField) {
+            fields.add(dtoField);
+          }
         }
       }
       dto.setFields(fields);
@@ -100,6 +87,30 @@ public class ModelDto {
       }
     }
 
+    return result;
+  }
+
+  static String getTypeNameFromSchema(Schema schema){
+    String result = null;
+    if (schema instanceof StringSchema) {
+      result = "String";
+    } else if (schema instanceof IntegerSchema) {
+      result = "Integer";
+    } else if (schema instanceof DateSchema) {
+      result = "Date";
+    } else if (schema instanceof DateTimeSchema) {
+      result = "DateTime";
+    } else if (schema instanceof ObjectSchema) {
+      result = "Object";
+    } else if (schema instanceof ArraySchema) {
+      if (null != ((ArraySchema) schema).getItems().get$ref()) {
+        result = "List<" + refToName(schema.get$ref()) + ">";
+      } else if (null != ((ArraySchema) schema).getItems().getType()){
+        result = "List<" + refToName(getTypeNameFromSchema(((ArraySchema) schema).getItems())) + ">";
+      }
+    } else {
+      result = refToName(schema.get$ref());
+    }
     return result;
   }
 

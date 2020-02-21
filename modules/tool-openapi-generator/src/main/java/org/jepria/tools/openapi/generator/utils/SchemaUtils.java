@@ -5,6 +5,9 @@ import io.swagger.v3.oas.models.media.Schema;
 
 public class SchemaUtils {
   public static String refToName(String ref) {
+    if (null == ref) {
+      return "";
+    }
     String refName = ref.split("/")[ref.split("/").length - 1];
     switch (refName) {
       case "OptionDtoInteger": refName = "OptionDto<Integer>"; break;
