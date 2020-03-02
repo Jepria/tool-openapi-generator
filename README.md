@@ -1,6 +1,7 @@
 # tool-openapi-generator
 
 ## Description
+This project allow to generate server-side project from [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification).
 The reference project for generated files [jepria-showcase](https://github.com/Jepria/jepria-showcase/tree/master/module/JepRiaShowcase).
 
 ## Usage
@@ -32,3 +33,5 @@ After cloning the project, you can build it from source with this command:
 ```sh
 mvn clean install
 ```
+### Customizing
+To change output file you can modify [mustache template files](https://github.com/Jepria/tool-openapi-generator/tree/master/modules/tool-openapi-generator/src/main/resources/mustache-templates).
