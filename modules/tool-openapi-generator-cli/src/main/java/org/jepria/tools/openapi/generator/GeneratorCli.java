@@ -6,6 +6,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.ApplicationStructureCreator;
@@ -26,6 +27,7 @@ public class GeneratorCli {
   public static final  String GEN_TESTS    = "tests";
   public static final  String GEN_REST     = "rest";
   public static final  String GEN_PROJECT  = "proj";
+  private static final String GEN_DTO      = "dto";
 
 
   public static void main(String[] args) throws ParseException, IOException {
@@ -83,6 +85,11 @@ public class GeneratorCli {
         ApplicationStructureCreator creator = new ApplicationStructureCreator(outputPath);
         creator.setBasePackage(mainPackage);
         creator.create(specPath);
+      } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_DTO)){
+        System.out.println("Generate dtos...");
+        DtoGenerator generator = new DtoGenerator(specPath);
+        generator.create();
+        generator.saveToFiles(outputPath);
       }
     } else {
 
