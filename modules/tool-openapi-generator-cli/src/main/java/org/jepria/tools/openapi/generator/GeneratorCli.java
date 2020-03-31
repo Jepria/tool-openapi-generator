@@ -61,6 +61,8 @@ public class GeneratorCli {
 
     if (commandLine.hasOption(PACKAGE_OPT)) {
       mainPackage = commandLine.getOptionValue(PACKAGE_OPT);
+    } else {
+      mainPackage = "org.jepria";
     }
 
     if (commandLine.hasOption(GEN_OPT)) {
