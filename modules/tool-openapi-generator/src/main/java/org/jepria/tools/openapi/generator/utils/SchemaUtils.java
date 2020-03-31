@@ -21,12 +21,17 @@ public class SchemaUtils {
     if (null != schema) {
       if (schema instanceof ArraySchema) {
         returnType = "List<" + refToName(((ArraySchema) schema).getItems().get$ref()) + ">";
-//      returnType = returnType + refToName(((ArraySchema) schema).getItems().get$ref());
       } else {
-        returnType = schema.getType();
+        switch (schema.getType()){
+          case "string"  : returnType = "String";  break;
+          case "integer" : returnType = "Integer"; break;
+          default: returnType = schema.getType();
+        }
+
       }
     }
     //TODO: another instances
     return returnType;
   }
+
 }
