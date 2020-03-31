@@ -14,6 +14,7 @@ Current versions:
 ```
 -i         - input specification file
 -o         - output directory
+-pkg       - main package
 -g         - generation options
    rest    - generate rest adapters
    tests   - generate rest adapters 
