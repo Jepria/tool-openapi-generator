@@ -2,13 +2,16 @@ package org.jepria.tools.openapi.generator.languages.jersey;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoImplDto;
+import org.jepria.tools.openapi.generator.languages.jersey.dtos.PomDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.RecordDefinitionDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServerFactoryDto;
 import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServiceDto;
@@ -24,7 +27,7 @@ public class ApplicationStructureCreator {
 
   private String apiSpecFolder = "api-spec";
   private String outputFolderName;
-  private String basePackage   = "";
+  private String basePackage = "";
 
   List<String> folders = new ArrayList<>();
 
@@ -48,6 +51,7 @@ public class ApplicationStructureCreator {
 //    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
     createWeb(this.outputFolderName + "src\\main\\webapp\\WEB-INF\\");
     createApplicationConfig(openAPI, this.outputFolderName + "src\\main\\java\\");
+    createPom(this.getBasePackage(), this.outputFolderName);
     return false;
   }
 
@@ -64,7 +68,7 @@ public class ApplicationStructureCreator {
     generator.create();
     List<? extends BaseDtoImpl> dtos = generator.getDtos();
     for (BaseDtoImpl dto : dtos) {
-      String entityFolder  = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
+      String entityFolder = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
       String entityPackage = this.getBasePackage() + "." + ((BaseJaxrsDto) dto).getClassName().toLowerCase();
       dto.saveToFile(entityFolder + "rest\\" + ((BaseJaxrsDto) dto).getClassName() + "JaxrsAdapter.java");
       createServerFactory(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
@@ -145,6 +149,14 @@ public class ApplicationStructureCreator {
     dto.setClassName(className);
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "RecordDefinition.java");
+  }
+
+  private void createPom(String basePackage, String outputFolder) throws IOException {
+    PomDto dto = new PomDto();
+    dto.setBasePackage(basePackage);
+    dto.setApplicationName("service-rest-name");
+    dto.fillTemplate();
+    dto.saveToFile(outputFolder + "pom.xml");
   }
 
   public void setBasePackage(String basePackage) {
