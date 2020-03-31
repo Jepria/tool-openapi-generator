@@ -23,7 +23,7 @@ Current versions:
 
 #### Example use of generator-cli.jar from bin repository.
 ```
-java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/1.0/generator-cli-1.0.jar -i samples/swagger.json -o samples/feature/rest/ -g rest
+java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/1.0/generator-cli-1.0.jar -i samples/swagger.json -o samples/feature/rest/ -g rest -pkg org.jepria
 ```
 ### Build projects
 To build from source, you need the following installed and available in your $PATH:
