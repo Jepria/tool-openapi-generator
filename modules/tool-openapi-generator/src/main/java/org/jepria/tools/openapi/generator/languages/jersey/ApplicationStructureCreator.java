@@ -56,8 +56,15 @@ public class ApplicationStructureCreator {
   }
 
   public void create(String specFileLocation) throws IOException {
-    OpenAPI openAPI = new OpenAPIV3Parser().read(specFileLocation);
-    create(openAPI);
+    OpenAPI openAPI = null;
+    try {
+      openAPI = new OpenAPIV3Parser().read(specFileLocation);
+    } catch (Exception e) {
+      System.err.println("Cannot read spec from file!");
+    }
+    if (null != openAPI) {
+      create(openAPI);
+    }
   }
 
   private void createAdapters(OpenAPI spec, String outputFolder) throws IOException {
