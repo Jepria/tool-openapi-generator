@@ -19,7 +19,8 @@ public class SearchJaxrsOperation extends JaxrsOperation {
 
   public SearchJaxrsOperation(String nickname, String httpMethod, String path, Operation oas3Operation) {
     super(nickname, httpMethod, path, oas3Operation);
-    String operationId = searchMap.entrySet().stream().filter(opId -> oas3Operation.getOperationId().equals(opId.getValue())).findFirst().get().getValue();
+//    String operationId = searchMap.entrySet().stream().filter(opId -> oas3Operation.getOperationId().equals(opId.getValue())).findFirst().get().getValue(); //BAD code??
+    String operationId = nickname; // OR NOT???
     switch (operationId) {
       case "postSearch":
         isPostSearch = true;

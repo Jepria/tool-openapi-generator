@@ -50,13 +50,13 @@ public class GeneratorCliTest {
 
   }
 
-  @Test
+  /*@Test
   public void test() throws IOException, ParseException {
     String specLocation = new File(getClass().getClassLoader().getResource("EmployeeCity/swagger.json").getPath()).getCanonicalPath();
 
     String[] argv = {"-" + SPEC_OPT, specLocation, "-" + OUTPUT_OPT, "out/", "-" + GEN_OPT, GEN_PROJECT, "-" + PACKAGE_OPT, "com.technology.rfi.operatorscoringadapter"};
 
     generate(argv);
-  }
+  }*/
 
 }

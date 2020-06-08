@@ -46,12 +46,12 @@ public class ApplicationStructureCreator {
     File file = new File(outputFolderName);
 
     Boolean check = file.mkdir();
-    createAdapters(openAPI, this.outputFolderName + "src\\main\\java\\");
-    createAdapterTests(openAPI, this.outputFolderName + "src\\test\\java");
+    createAdapters(openAPI, this.outputFolderName + "\\src\\main\\java\\");
+    createAdapterTests(openAPI, this.outputFolderName + "\\src\\test\\java\\");
 //    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
-    createWeb(this.outputFolderName + "src\\main\\webapp\\WEB-INF\\");
-    createApplicationConfig(openAPI, this.outputFolderName + "src\\main\\java\\");
-    createPom(this.getBasePackage(), this.outputFolderName);
+    createWeb(this.outputFolderName + "\\src\\main\\webapp\\WEB-INF\\");
+    createApplicationConfig(openAPI, this.outputFolderName + "\\src\\main\\java\\");
+    createPom(this.getBasePackage(), this.outputFolderName + "\\");
     return false;
   }
 

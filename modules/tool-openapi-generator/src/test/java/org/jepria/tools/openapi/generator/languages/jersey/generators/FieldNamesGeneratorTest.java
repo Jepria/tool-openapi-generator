@@ -1,19 +1,23 @@
 package org.jepria.tools.openapi.generator.languages.jersey.generators;
 
+import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 class FieldNamesGeneratorTest {
 
   @Test
   void createTest() throws IOException {
-    String specShowcase = "d:\\work\\jepria-showcase\\module\\JepRiaShowcase\\App\\service-rest\\src\\api-spec\\feature\\swagger.json";
-    String specBroker   = "d:\\work\\tool-openapi-generator\\modules\\tool-openapi-generator\\src\\main\\resources\\spec\\broker\\swagger.json";
-    String specTest     = "d:\\work\\tool-openapi-generator\\modules\\tool-openapi-generator\\src\\main\\resources\\spec\\swagger.json";
-    String specLocation = specShowcase;
+    String specLocation = new File(getClass().getClassLoader().getResource("spec/swagger.json").getPath()).getCanonicalPath();
+    String outputFolder = new java.io.File(".").getCanonicalPath() + "\\temp\\FieldNamesGeneratorTest\\";
 
-    String              outputFolder = new java.io.File(".").getCanonicalPath() + "\\temp\\FieldNamesGeneratorTest\\";
-    FieldNamesGenerator generator    = new FieldNamesGenerator(specLocation);
+    if (new File(outputFolder).exists()) {
+      FileUtils.cleanDirectory(new File(outputFolder));
+    }
+
+    FieldNamesGenerator generator = new FieldNamesGenerator(specLocation);
 
     generator.create();
     generator.saveToFiles(outputFolder);

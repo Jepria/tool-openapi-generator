@@ -37,7 +37,7 @@ public class BaseDtoImpl implements BaseDto {
 
     if (null != this.generatedCode) {
 
-      new java.io.File(location).mkdirs();
+      new File(location).mkdirs();
 
       File file = new File(location);
       if (file.exists()) {
