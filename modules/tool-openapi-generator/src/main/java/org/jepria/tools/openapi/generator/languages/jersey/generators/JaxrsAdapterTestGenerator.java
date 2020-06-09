@@ -13,7 +13,7 @@ public class JaxrsAdapterTestGenerator extends DefaultGenerator {
 
   public JaxrsAdapterTestGenerator(OpenAPI spec) {
     this.setOpenAPI(spec);
-    setTemplateFileName("/mustache-templates/api-test.mustache");
+    setTemplateFileName("/mustache-templates/service-rest/src/test/java/JaxrsAdapterTest.mustache");
   }
 
   public JaxrsAdapterTestGenerator(String specLocation) {
