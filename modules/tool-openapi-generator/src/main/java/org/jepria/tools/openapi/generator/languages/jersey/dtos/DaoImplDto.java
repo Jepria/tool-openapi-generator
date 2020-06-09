@@ -9,6 +9,7 @@ public class DaoImplDto extends BaseDtoImpl {
 
   private String apiPackage;
   private String className;
+  private String modelPackage;
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
 
@@ -39,5 +40,13 @@ public class DaoImplDto extends BaseDtoImpl {
 
   public void setOperations(List<OtherJaxrsOperation> operations) {
     this.operations = operations;
+  }
+
+  public String getModelPackage() {
+    return modelPackage;
+  }
+
+  public void setModelPackage(String modelPackage) {
+    this.modelPackage = modelPackage;
   }
 }

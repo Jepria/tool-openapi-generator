@@ -128,6 +128,7 @@ public class ApplicationStructureCreator {
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
+    dto.setModelPackage(apiPackage + "." + "dto");
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "Service.java");
   }
@@ -137,6 +138,7 @@ public class ApplicationStructureCreator {
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
+    dto.setModelPackage(apiPackage + "." + "dto");
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "Dao.java");
   }
@@ -146,6 +148,7 @@ public class ApplicationStructureCreator {
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
+    dto.setModelPackage(apiPackage + "." + "dto");
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "DaoImpl.java");
   }

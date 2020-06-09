@@ -10,13 +10,13 @@ public class DaoDto extends BaseDtoImpl {
 
   private String apiPackage;
   private String className;
+  private String modelPackage;
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
 
   public DaoDto() {
     setTemplate(TEMPLATE_FILE_NAME);
   }
-
 
   public String getApiPackage() {
     return apiPackage;
@@ -40,5 +40,13 @@ public class DaoDto extends BaseDtoImpl {
 
   public void setOperations(List<OtherJaxrsOperation> operations) {
     this.operations = operations;
+  }
+
+  public String getModelPackage() {
+    return modelPackage;
+  }
+
+  public void setModelPackage(String modelPackage) {
+    this.modelPackage = modelPackage;
   }
 }
