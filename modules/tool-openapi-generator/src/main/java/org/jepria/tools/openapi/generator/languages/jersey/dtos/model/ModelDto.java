@@ -20,12 +20,11 @@ public class ModelDto {
 
   private String modelPackage;
   private String className;
+  List<ModelField> fields = new ArrayList<>();
 
   public void setFields(List<ModelField> fields) {
     this.fields = fields;
   }
-
-  List<ModelField> fields = new ArrayList<>();
 
   public static List<ModelDto> getFromSpec(OpenAPI spec) {
     List<ModelDto> dtos = new ArrayList<>();

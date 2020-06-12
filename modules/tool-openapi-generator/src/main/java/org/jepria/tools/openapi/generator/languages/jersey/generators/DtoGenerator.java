@@ -11,6 +11,8 @@ import org.jepria.tools.openapi.generator.languages.jersey.dtos.model.ModelDto;
 
 public class DtoGenerator extends DefaultGenerator {
 
+  private String apiPackage;
+
   public DtoGenerator(OpenAPI spec) {
     this.setOpenAPI(spec);
     setTemplateFileName("/mustache-templates/dto.mustache");
@@ -38,4 +40,7 @@ public class DtoGenerator extends DefaultGenerator {
 
   }
 
+  public void setApiPackage(String apiPackage) {
+    this.apiPackage = apiPackage;
+  }
 }
