@@ -22,6 +22,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerat
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.WebGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.test.JaxrsCrudTestDto;
 
 public class ApplicationStructureCreator {
 
@@ -46,7 +47,7 @@ public class ApplicationStructureCreator {
     File file = new File(outputFolderName);
 
     Boolean check = file.mkdir();
-    createAdapters(openAPI, this.outputFolderName + "\\src\\main\\java\\");
+    createAdapters(openAPI, this.outputFolderName);
     createAdapterTests(openAPI, this.outputFolderName + "\\src\\test\\java\\");
 //    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
     createWeb(this.outputFolderName + "\\src\\main\\webapp\\WEB-INF\\");
@@ -68,14 +69,16 @@ public class ApplicationStructureCreator {
   }
 
   private void createAdapters(OpenAPI spec, String outputFolder) throws IOException {
-    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\";
+    String srcFolder = outputFolder + "\\src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";
+    String testFolder = outputFolder + "\\src\\test\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";;
+//    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\";
 
     JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(spec);
     generator.setMainPackage(this.getBasePackage());
     generator.create();
     List<? extends BaseDtoImpl> dtos = generator.getDtos();
     for (BaseDtoImpl dto : dtos) {
-      String entityFolder = outputFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
+      String entityFolder = srcFolder + ((BaseJaxrsDto) dto).getClassName().toLowerCase() + "\\";
       String entityPackage = this.getBasePackage() + "." + ((BaseJaxrsDto) dto).getClassName().toLowerCase();
       dto.saveToFile(entityFolder + "rest\\" + ((BaseJaxrsDto) dto).getClassName() + "JaxrsAdapter.java");
       createServerFactory(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
@@ -84,6 +87,7 @@ public class ApplicationStructureCreator {
       createDaoImpl(entityPackage, ((BaseJaxrsDto) dto).getClassName(), ((BaseJaxrsDto) dto).getOperations(), entityFolder + "dao\\");
       createDtos(spec, entityFolder + "dto\\");
       createRecordDefinition(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
+      createCrudTests(entityPackage, ((BaseJaxrsDto) dto).getClassName(), testFolder);
     }
 
   }
@@ -167,6 +171,24 @@ public class ApplicationStructureCreator {
     dto.setApplicationName("service-rest-name");
     dto.fillTemplate();
     dto.saveToFile(outputFolder + "pom.xml");
+  }
+
+  private void createCrudTests(String entityPackage, String className, String outputFolder) {
+    JaxrsCrudTestDto dto = new JaxrsCrudTestDto();
+    dto.setApiPackage(entityPackage);
+    dto.setClassName(className);
+    dto.setModelPackage(entityPackage + ".dto");
+    try {
+      dto.fillTemplate();
+    } catch (IOException e) {
+      System.err.println("JaxrsCrudTest fillTemplate");
+      e.printStackTrace();
+    }
+    try {
+      dto.saveToFile(outputFolder + className + "JaxrsCrudTestIT.java");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void setBasePackage(String basePackage) {
