@@ -30,7 +30,7 @@ public class JaxrsAdapterGenerator extends DefaultGenerator {
     List<BaseJaxrsDto> list = BaseJaxrsDto.getFromSpec(this.getOpenAPI());
 
     if (null == this.getMainPackage()) {
-      this.setMainPackage("com.technology.jep.jepriashowcase");
+      this.setMainPackage("com.example");
     }
 
     for (BaseJaxrsDto dto : list) {

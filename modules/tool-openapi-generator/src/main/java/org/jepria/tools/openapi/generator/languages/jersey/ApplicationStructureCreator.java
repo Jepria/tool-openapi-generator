@@ -39,36 +39,32 @@ public class ApplicationStructureCreator {
     folders.add(outputFolderName + "/" + apiSpecFolder);
   }
 
-  public boolean create(OpenAPI openAPI) throws IOException {
+  public void create(OpenAPI openAPI) throws IOException {
     if (null == openAPI) {
-      return false;
+      throw new IllegalArgumentException("openAPI argument cannot be null");
     }
 
     File file = new File(outputFolderName);
 
     Boolean check = file.mkdir();
-    createAdapters(openAPI, this.outputFolderName);
+    createEntities(openAPI, this.outputFolderName);
     createAdapterTests(openAPI, this.outputFolderName + "\\src\\test\\java\\");
 //    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
     createWeb(this.outputFolderName + "\\src\\main\\webapp\\WEB-INF\\");
     createApplicationConfig(openAPI, this.outputFolderName + "\\src\\main\\java\\");
     createPom(this.getBasePackage(), this.outputFolderName + "\\");
-    return false;
   }
 
   public void create(String specFileLocation) throws IOException {
-    OpenAPI openAPI = null;
     try {
-      openAPI = new OpenAPIV3Parser().read(specFileLocation);
+      OpenAPI openAPI = new OpenAPIV3Parser().read(specFileLocation);
+      create(openAPI);
     } catch (Exception e) {
       System.err.println("Cannot read spec from file!");
     }
-    if (null != openAPI) {
-      create(openAPI);
-    }
   }
 
-  private void createAdapters(OpenAPI spec, String outputFolder) throws IOException {
+  private void createEntities(OpenAPI spec, String outputFolder) throws IOException {
     String srcFolder = outputFolder + "\\src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";
     String testFolder = outputFolder + "\\src\\test\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";;
 //    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\";
@@ -98,7 +94,7 @@ public class ApplicationStructureCreator {
     generator.saveToFiles(outputFolder);
   }
 
-  private void createDtos(OpenAPI spec, String outputFolder) throws IOException {
+  private void createDtos(OpenAPI spec, String outputFolder) throws IOException { //TODO: DTO packages missed!!!
     DtoGenerator generator = new DtoGenerator(spec);
     generator.create();
     generator.saveToFiles(outputFolder);
@@ -121,54 +117,66 @@ public class ApplicationStructureCreator {
 
   private void createServerFactory(String apiPackage, String className, String outputFolder) throws IOException {
     ServerFactoryDto dto = new ServerFactoryDto();
+
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "ServerFactory.java");
   }
 
   private void createService(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
     ServiceDto dto = new ServiceDto();
+
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "Service.java");
   }
 
   private void createDao(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
     DaoDto dto = new DaoDto();
+
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "Dao.java");
   }
 
   private void createDaoImpl(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
     DaoImplDto dto = new DaoImplDto();
+
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "DaoImpl.java");
   }
 
   private void createRecordDefinition(String apiPackage, String className, String outputFolder) throws IOException {
     RecordDefinitionDto dto = new RecordDefinitionDto();
+
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + className + "RecordDefinition.java");
   }
 
   private void createPom(String basePackage, String outputFolder) throws IOException {
     PomDto dto = new PomDto();
+
     dto.setBasePackage(basePackage);
     dto.setApplicationName("service-rest-name");
+
     dto.fillTemplate();
     dto.saveToFile(outputFolder + "pom.xml");
   }
