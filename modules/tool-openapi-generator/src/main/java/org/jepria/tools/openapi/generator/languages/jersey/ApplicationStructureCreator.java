@@ -8,21 +8,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.DaoImplDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.PomDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.RecordDefinitionDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServerFactoryDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.ServiceDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.BaseJaxrsDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.PomDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.RecordDefinitionDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServerFactoryDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.ApplicationConfigGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.dto.DtoGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.WebGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.test.JaxrsCrudTestDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.test.JaxrsCrudTestDto;
 
 public class ApplicationStructureCreator {
 
@@ -84,6 +84,7 @@ public class ApplicationStructureCreator {
       createDtos(spec, entityFolder + "dto\\");
       createRecordDefinition(entityPackage, ((BaseJaxrsDto) dto).getClassName(), entityFolder);
       createCrudTests(entityPackage, ((BaseJaxrsDto) dto).getClassName(), testFolder);
+      //TODO: FieldNames ???
     }
 
   }

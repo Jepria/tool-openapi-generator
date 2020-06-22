@@ -1,4 +1,6 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity;
+
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 
 public class RecordDefinitionDto extends BaseDtoImpl {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/RecordDefinition.mustache";

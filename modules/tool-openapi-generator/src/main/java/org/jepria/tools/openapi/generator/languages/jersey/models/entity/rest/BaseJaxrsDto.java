@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -10,10 +10,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.CrudJaxrsOperation;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.SearchJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.CrudJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.SearchJaxrsOperation;
 import org.jepria.tools.openapi.generator.utils.StringUtils;
 
 public class BaseJaxrsDto extends BaseDtoImpl {

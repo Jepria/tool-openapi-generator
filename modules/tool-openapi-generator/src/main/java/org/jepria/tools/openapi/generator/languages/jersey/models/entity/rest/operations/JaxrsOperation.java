@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations;
 
 import static org.jepria.tools.openapi.generator.utils.SchemaUtils.getSchemaType;
 import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;

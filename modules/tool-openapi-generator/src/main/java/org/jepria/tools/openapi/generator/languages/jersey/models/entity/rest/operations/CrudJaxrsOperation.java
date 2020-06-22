@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations;
 
 import io.swagger.v3.oas.models.Operation;
 import java.util.HashMap;

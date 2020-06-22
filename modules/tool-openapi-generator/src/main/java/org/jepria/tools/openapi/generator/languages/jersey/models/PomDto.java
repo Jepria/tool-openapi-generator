@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models;
 
 public class PomDto extends BaseDtoImpl {
 

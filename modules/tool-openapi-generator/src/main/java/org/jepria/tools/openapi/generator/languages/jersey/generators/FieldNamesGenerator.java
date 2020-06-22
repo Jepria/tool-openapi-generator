@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.model.ModelDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.ModelDto;
 
 public class FieldNamesGenerator extends DefaultGenerator {
 

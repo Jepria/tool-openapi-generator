@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models;
 
 import java.io.IOException;
 

@@ -1,6 +1,6 @@
-package org.jepria.tools.openapi.generator.languages.jersey.test;
+package org.jepria.tools.openapi.generator.languages.jersey.models.test;
 
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 
 public class JaxrsCrudTestDto extends BaseDtoImpl {
     private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/test/java/JaxrsAdapterCrudTest.mustache";

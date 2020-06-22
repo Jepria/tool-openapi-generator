@@ -1,6 +1,7 @@
 package org.jepria.tools.openapi.generator.languages.jersey.generators;
 
 import org.apache.commons.io.FileUtils;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

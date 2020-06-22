@@ -1,8 +1,6 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos.model;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto;
 
 import static org.jepria.tools.openapi.generator.utils.SchemaUtils.refToName;
-import static org.jepria.tools.openapi.generator.utils.StringUtils.sanitizeName;
-import static org.jepria.tools.openapi.generator.utils.StringUtils.underscore;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.ArraySchema;

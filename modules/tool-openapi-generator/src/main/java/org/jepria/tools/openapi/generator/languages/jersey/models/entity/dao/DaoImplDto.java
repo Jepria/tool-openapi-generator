@@ -1,12 +1,12 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.operations.OtherJaxrsOperation;
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 
-public class DaoDto extends BaseDtoImpl {
-
-  private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/dao/Dao.mustache";
+public class DaoImplDto extends BaseDtoImpl {
+  private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/dao/DaoImpl.mustache";
 
   private String apiPackage;
   private String className;
@@ -14,9 +14,10 @@ public class DaoDto extends BaseDtoImpl {
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
 
-  public DaoDto() {
+  public DaoImplDto() {
     setTemplate(TEMPLATE_FILE_NAME);
   }
+
 
   public String getApiPackage() {
     return apiPackage;

@@ -1,4 +1,4 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos.model;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto;
 
 import static org.jepria.tools.openapi.generator.utils.StringUtils.camelize;
 

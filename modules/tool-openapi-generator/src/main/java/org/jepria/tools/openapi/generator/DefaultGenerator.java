@@ -11,7 +11,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 
 public abstract class DefaultGenerator implements Generator {
 

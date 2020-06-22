@@ -1,4 +1,6 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models.entity;
+
+import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 
 public class ServerFactoryDto extends BaseDtoImpl {
 

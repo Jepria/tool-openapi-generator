@@ -1,7 +1,7 @@
-package org.jepria.tools.openapi.generator.languages.jersey.dtos;
+package org.jepria.tools.openapi.generator.languages.jersey.models;
 
 import java.util.List;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
 
 public class ApplicationConfigDto {
   private String mainPackage;

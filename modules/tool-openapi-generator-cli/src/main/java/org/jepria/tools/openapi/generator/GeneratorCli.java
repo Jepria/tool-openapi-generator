@@ -6,10 +6,10 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.dto.DtoGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.ApplicationStructureCreator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 
 public class GeneratorCli {
 

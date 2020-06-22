@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.ApplicationConfigDto;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
 
 public class ApplicationConfigGenerator extends DefaultGenerator {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/main/rest/jersey/ApplicationConfig.mustache";
