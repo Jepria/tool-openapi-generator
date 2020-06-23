@@ -14,37 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ModelDto {
+public class DtoModel {
 
   private String modelPackage;
   private String className;
-  List<ModelField> fields = new ArrayList<>();
+  List<DtoField> fields = new ArrayList<>();
 
-  public void setFields(List<ModelField> fields) {
+  public void setFields(List<DtoField> fields) {
     this.fields = fields;
   }
 
-  public static List<ModelDto> getFromSpec(OpenAPI spec) {
-    List<ModelDto> dtos = new ArrayList<>();
+  public static List<DtoModel> getFromSpec(OpenAPI spec) {
+    List<DtoModel> dtos = new ArrayList<>();
 
     Map<String, Schema> schemas = spec.getComponents().getSchemas();
     for (String className : schemas.keySet()) {
       if (isSystem(className)) {
         continue;
       }
-      ModelDto dto = new ModelDto();
+      DtoModel dto = new DtoModel();
 
       Schema schema = schemas.get(className);
 
-      List<ModelField> fields = new ArrayList<>();
+      List<DtoField> fields = new ArrayList<>();
 
       if (schema instanceof ArraySchema) {
-        ModelField dtoField = new ModelField("list", "List<" +  refToName(((ArraySchema) schema).getItems().get$ref()) + ">");
+        DtoField dtoField = new DtoField("list", "List<" +  refToName(((ArraySchema) schema).getItems().get$ref()) + ">");
         fields.add(dtoField);
       } else if (null != schema.getProperties()) {
         for (Object fieldName : schema.getProperties().keySet()) {
-          ModelField dtoField = null;
-          dtoField = new ModelField(fieldName.toString(), getTypeNameFromSchema((Schema) schema.getProperties().get(fieldName)));
+          DtoField dtoField = null;
+          dtoField = new DtoField(fieldName.toString(), getTypeNameFromSchema((Schema) schema.getProperties().get(fieldName)));
 
           if (null != dtoField) {
             fields.add(dtoField);

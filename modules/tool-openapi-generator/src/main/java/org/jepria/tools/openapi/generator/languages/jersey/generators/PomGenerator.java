@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.models.PomDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.PomModel;
 
 public class PomGenerator extends DefaultGenerator {
 
@@ -21,7 +21,7 @@ public class PomGenerator extends DefaultGenerator {
   public void create() {
     Map<String, String> map = new HashMap<>();
 
-    PomDto dto = new PomDto();
+    PomModel dto = new PomModel();
     dto.setBasePackage(this.getMainPackage());
     dto.setApplicationName(this.applicationName);
 

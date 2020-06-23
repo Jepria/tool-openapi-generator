@@ -13,11 +13,11 @@ import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.dto
 import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.RecordDefinitionDto;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServerFactoryDto;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceDto;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoDto;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.RecordDefinitionModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServerFactoryModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.test.JaxrsCrudTestDto;
@@ -115,7 +115,7 @@ public class ApplicationStructureCreator {
   }
 
   private void createServerFactory(String apiPackage, String className, String outputFolder) throws IOException {
-    ServerFactoryDto dto = new ServerFactoryDto();
+    ServerFactoryModel dto = new ServerFactoryModel();
 
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
@@ -125,7 +125,7 @@ public class ApplicationStructureCreator {
   }
 
   private void createService(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
-    ServiceDto dto = new ServiceDto();
+    ServiceModel dto = new ServiceModel();
 
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
@@ -137,7 +137,7 @@ public class ApplicationStructureCreator {
   }
 
   private void createDao(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
-    DaoDto dto = new DaoDto();
+    DaoModel dto = new DaoModel();
 
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
@@ -149,7 +149,7 @@ public class ApplicationStructureCreator {
   }
 
   private void createDaoImpl(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
-    DaoImplDto dto = new DaoImplDto();
+    DaoImplModel dto = new DaoImplModel();
 
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);
@@ -161,7 +161,7 @@ public class ApplicationStructureCreator {
   }
 
   private void createRecordDefinition(String apiPackage, String className, String outputFolder) throws IOException {
-    RecordDefinitionDto dto = new RecordDefinitionDto();
+    RecordDefinitionModel dto = new RecordDefinitionModel();
 
     dto.setApiPackage(apiPackage);
     dto.setClassName(className);

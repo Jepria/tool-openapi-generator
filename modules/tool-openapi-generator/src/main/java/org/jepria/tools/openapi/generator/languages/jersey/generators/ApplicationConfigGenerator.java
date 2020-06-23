@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
 
 public class ApplicationConfigGenerator extends DefaultGenerator {
@@ -27,7 +27,7 @@ public class ApplicationConfigGenerator extends DefaultGenerator {
   public void create() {
     Map<String, String> map = new HashMap<>();
 
-    ApplicationConfigDto dto = new ApplicationConfigDto();
+    ApplicationConfigModel dto = new ApplicationConfigModel();
     dto.setMainPackage(this.getMainPackage());
 
     List<BaseJaxrsDto> adapters = BaseJaxrsDto.getFromSpec(this.getOpenAPI());

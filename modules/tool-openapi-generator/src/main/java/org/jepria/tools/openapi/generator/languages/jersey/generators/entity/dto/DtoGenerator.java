@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.ModelDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.DtoModel;
 
 public class DtoGenerator extends DefaultGenerator {
 
@@ -26,9 +26,9 @@ public class DtoGenerator extends DefaultGenerator {
   public void create() {
     Map<String, String> map = new HashMap<>();
 
-    List<ModelDto> list = ModelDto.getFromSpec(this.getOpenAPI());
+    List<DtoModel> list = DtoModel.getFromSpec(this.getOpenAPI());
 
-    for (ModelDto dto : list) {
+    for (DtoModel dto : list) {
       try {
         map.put(dto.getClassName(), this.fillTemplate(dto));
       } catch (IOException e) {

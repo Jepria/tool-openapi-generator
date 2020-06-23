@@ -5,7 +5,7 @@ import java.util.List;
 import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 
-public class DaoImplDto extends BaseDtoImpl {
+public class DaoImplModel extends BaseDtoImpl {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/dao/DaoImpl.mustache";
 
   private String apiPackage;
@@ -14,7 +14,7 @@ public class DaoImplDto extends BaseDtoImpl {
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
 
-  public DaoImplDto() {
+  public DaoImplModel() {
     setTemplate(TEMPLATE_FILE_NAME);
   }
 

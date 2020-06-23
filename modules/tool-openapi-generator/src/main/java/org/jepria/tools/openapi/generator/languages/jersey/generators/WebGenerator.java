@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.models.WebDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.WebModel;
 
 public class WebGenerator extends DefaultGenerator {
 
@@ -19,11 +19,11 @@ public class WebGenerator extends DefaultGenerator {
   public void create() {
     Map<String, String> map = new HashMap<>();
 
-    WebDto webDto = new WebDto();
-    webDto.setMainPackage(this.getMainPackage());
+    WebModel webModel = new WebModel();
+    webModel.setMainPackage(this.getMainPackage());
 
     try {
-      map.put("web", this.fillTemplate(webDto));
+      map.put("web", this.fillTemplate(webModel));
     } catch (IOException e) {
       e.printStackTrace();
     }

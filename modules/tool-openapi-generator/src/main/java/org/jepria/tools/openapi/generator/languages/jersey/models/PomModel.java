@@ -1,6 +1,6 @@
 package org.jepria.tools.openapi.generator.languages.jersey.models;
 
-public class PomDto {
+public class PomModel {
 
   private String basePackage;
   private String applicationName;
