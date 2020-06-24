@@ -10,13 +10,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.CrudJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.SearchJaxrsOperation;
 import org.jepria.tools.openapi.generator.utils.StringUtils;
 
-public class BaseJaxrsModel extends BaseDtoImpl {
+public class JaxrsAdapterModel {
 
   private String  apiPackage;
   private String  modelPackage;
@@ -30,7 +29,7 @@ public class BaseJaxrsModel extends BaseDtoImpl {
   private List<CrudJaxrsOperation>   crudOperations   = new ArrayList<>();
   private List<SearchJaxrsOperation> searchOperations = new ArrayList<>();
 
-  public BaseJaxrsModel(String rootPath) {
+  public JaxrsAdapterModel(String rootPath) {
     this.rootPath  = rootPath;
     this.className = rootPath;
   }
@@ -69,12 +68,14 @@ public class BaseJaxrsModel extends BaseDtoImpl {
     return rootPath;
   }
 
-  public static List<BaseJaxrsModel> getFromSpec(OpenAPI spec) {
-    return getListFromPath(spec.getPaths());
+  public static List<JaxrsAdapterModel> getFromSpec(OpenAPI spec) {
+    return getFromSpec(spec, "");
   }
 
-  private static List<BaseJaxrsModel> getListFromPath(Paths paths) {
-    List<BaseJaxrsModel> resultDtosList = new ArrayList<>();
+  public static List<JaxrsAdapterModel> getFromSpec(OpenAPI spec, String mainPackage) {
+    Paths paths = spec.getPaths();
+
+    List<JaxrsAdapterModel> resultDtosList = new ArrayList<>();
 
     Set<String> rootPaths = paths.entrySet().stream().map(p -> getRootPath(p.getKey())).collect(Collectors.toSet());
     for (String path : rootPaths) {
@@ -85,11 +86,17 @@ public class BaseJaxrsModel extends BaseDtoImpl {
       resultDtosList.addAll(getAdapters(path, getApiName(path), children));
     }
 
+    for (JaxrsAdapterModel model : resultDtosList) {
+      model.setModelPackage(mainPackage + "." + model.getClassName().toLowerCase() + ".dto");
+      model.setMainPackage(mainPackage + "." + model.getClassName().toLowerCase());
+      model.setApiPackage(mainPackage + "." + model.getClassName().toLowerCase() + ".rest");
+    }
+
     return resultDtosList;
   }
 
-  private static List<BaseJaxrsModel> getAdapters(String rootPath, String rootApiName, Map<String, PathItem> paths) {
-    List<BaseJaxrsModel> resultDtosList = new ArrayList<>();
+  private static List<JaxrsAdapterModel> getAdapters(String rootPath, String rootApiName, Map<String, PathItem> paths) {
+    List<JaxrsAdapterModel> resultDtosList = new ArrayList<>();
 
     String childRootPath = rootPath + "/{" + rootApiName + "Id}/" + rootApiName + "-";
 
@@ -97,14 +104,14 @@ public class BaseJaxrsModel extends BaseDtoImpl {
         (p) -> !p.getKey().startsWith(childRootPath))
         .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
-    BaseJaxrsModel dto = pathToDto(rootPath, current);
+    JaxrsAdapterModel dto = pathToDto(rootPath, current);
     dto.setApiPackage("." + StringUtils.camelize(StringUtils.sanitizeName(rootPath), true));
     dto.setClassName(StringUtils.camelize(StringUtils.sanitizeName(rootApiName), false));
     resultDtosList.add(dto);
 
     Set<String> childNames = paths.keySet().stream().filter(
         pathItem -> pathItem.startsWith(childRootPath))
-        .map(BaseJaxrsModel::getChildRootPath).collect(Collectors.toSet());
+        .map(JaxrsAdapterModel::getChildRootPath).collect(Collectors.toSet());
 
     for (String name : childNames) {
       Map<String, PathItem> children = paths.entrySet().stream().filter(
@@ -117,8 +124,8 @@ public class BaseJaxrsModel extends BaseDtoImpl {
     return resultDtosList;
   }
 
-  private static BaseJaxrsModel pathToDto(String rootPath, Map<String, PathItem> paths) {
-    BaseJaxrsModel dto = new BaseJaxrsModel(rootPath);//new T(rootPath);
+  private static JaxrsAdapterModel pathToDto(String rootPath, Map<String, PathItem> paths) {
+    JaxrsAdapterModel dto = new JaxrsAdapterModel(rootPath);//new T(rootPath);
     for (Entry<String, PathItem> pathname : paths.entrySet()) {
       if (null != pathname.getValue().getGet()) {
         dto.addOperation("GET", pathname.getKey(), pathname.getValue().getGet());

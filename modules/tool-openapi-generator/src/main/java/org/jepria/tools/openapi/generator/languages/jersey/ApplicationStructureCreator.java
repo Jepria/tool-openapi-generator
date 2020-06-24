@@ -5,6 +5,7 @@ import static org.jepria.tools.openapi.generator.languages.jersey.Templates.CRUD
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_IMPL_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DTO_TEMPLATE;
+import static org.jepria.tools.openapi.generator.languages.jersey.Templates.JAXRS_ADAPTER_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.POM_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.RECORD_DEFINITION_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.SERVER_FACTORY_TEMPLATE;
@@ -18,12 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.jepria.tools.openapi.generator.GeneratorImpl;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.ApplicationConfigGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.dto.DtoGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigModel;
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.PomModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.WebModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.RecordDefinitionModel;
@@ -32,7 +29,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.models.entity.Service
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.DtoModel;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.JaxrsAdapterModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.test.JaxrsCrudTestModel;
 
@@ -60,8 +57,7 @@ public class ApplicationStructureCreator {
 
     Boolean check = file.mkdir();
     createEntities(openAPI, this.outputFolderName);
-    createAdapterTests(openAPI, this.outputFolderName + "\\src\\test\\java\\");
-//    createDtos(openAPI, this.outputFolderName + "src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\");
+//    createAdapterTests(openAPI, this.outputFolderName + "\\src\\test\\java\\");
     createWeb(this.outputFolderName + "\\src\\main\\webapp\\WEB-INF\\");
     createApplicationConfig(openAPI, this.outputFolderName + "\\src\\main\\java\\");
     createPom(this.getBasePackage(), this.outputFolderName + "\\");
@@ -81,25 +77,27 @@ public class ApplicationStructureCreator {
   private void createEntities(OpenAPI spec, String outputFolder) throws IOException {
     String srcFolder  = outputFolder + "\\src\\main\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";
     String testFolder = outputFolder + "\\src\\test\\java\\" + this.getBasePackage().replace(".", "\\") + "\\";
-    ;
-//    outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\";
 
-    JaxrsAdapterGenerator generator = new JaxrsAdapterGenerator(spec);
-    generator.setMainPackage(this.getBasePackage());
-    generator.create();
-    List<? extends BaseDtoImpl> dtos = generator.getDtos();
-    for (BaseDtoImpl dto : dtos) {
-      String className     = ((BaseJaxrsModel) dto).getClassName();
+    List<JaxrsAdapterModel> models = JaxrsAdapterModel.getFromSpec(spec, this.getBasePackage());
+
+    String fileName = "JaxrsAdapter.java";
+
+    GeneratorImpl generator = new GeneratorImpl();
+
+    for (JaxrsAdapterModel model : models) {
+      String className     = model.getClassName();
       String entityFolder  = srcFolder + className.toLowerCase() + "\\";
       String entityPackage = this.getBasePackage() + "." + className.toLowerCase();
-      dto.saveToFile(entityFolder + "rest\\" + className + "JaxrsAdapter.java");
+
+      generator.generate(model, entityFolder + "rest\\", model.getClassName() + fileName, JAXRS_ADAPTER_TEMPLATE);
+
       createServerFactory(entityPackage, className, entityFolder);
-      createService(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder);
-      createDao(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder + "dao\\");
-      createDaoImpl(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder + "dao\\");
-      createDtos(spec, entityPackage , className, entityFolder + "dto\\");
+      createService(entityPackage, className, model.getOperations(), entityFolder);
+      createDao(entityPackage, className, model.getOperations(), entityFolder + "dao\\");
+      createDaoImpl(entityPackage, className, model.getOperations(), entityFolder + "dao\\");
+      createDtos(spec, entityPackage, className, entityFolder + "dto\\");
       createRecordDefinition(entityPackage, className, entityFolder);
-      createCrudTests(entityPackage, className, testFolder);
+      createCrudTests(entityPackage, className, testFolder + className.toLowerCase() + "\\");
       //TODO: FieldNames ???
     }
 
@@ -111,17 +109,17 @@ public class ApplicationStructureCreator {
     generator.saveToFiles(outputFolder);
   }
 
-  private void createDtos(OpenAPI spec, String entityPackage, String className, String outputFolder) throws IOException { //TODO: DTO packages missed!!!
+  private void createDtos(OpenAPI spec, String entityPackage, String className, String outputFolder) throws IOException {
 
     List<DtoModel> models = DtoModel.getFromSpec(spec);
 
-    String fileName = "Dto.java";
+    String fileExt = ".java";
 
     GeneratorImpl generator = new GeneratorImpl();
     for (DtoModel model : models) {
       if (model.getClassName().contains(className)) { // filtered model only for current entity // TODO: needed bugfix
         model.setModelPackage(entityPackage);
-        generator.generate(model, outputFolder, model.getClassName() + fileName, DTO_TEMPLATE);
+        generator.generate(model, outputFolder, model.getClassName() + fileExt, DTO_TEMPLATE);
       }
     }
 

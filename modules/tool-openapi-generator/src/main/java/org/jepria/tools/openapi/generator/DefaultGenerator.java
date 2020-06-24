@@ -9,15 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.Map;
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 
 public abstract class DefaultGenerator implements Generator {
 
   private Map<String, String> values;
-
-  private List<? extends BaseDtoImpl> dtos;
 
   private String templateFileName;
 
@@ -105,14 +101,6 @@ public abstract class DefaultGenerator implements Generator {
 
   public void setBaseName(String baseName) {
     this.baseName = baseName;
-  }
-
-  public List<? extends BaseDtoImpl> getDtos() {
-    return dtos;
-  }
-
-  public void setDtos(List<? extends BaseDtoImpl> dtos) {
-    this.dtos = dtos;
   }
 
   public Map<String, String> getValues() {
