@@ -7,6 +7,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.jepria.tools.openapi.generator.languages.jersey.ApplicationStructureCreator;
+import org.jepria.tools.openapi.generator.languages.jersey.CrudTestsCreator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 
 public class GeneratorCli {
@@ -64,12 +65,11 @@ public class GeneratorCli {
     if (commandLine.hasOption(GEN_OPT)) {
       if (commandLine.getOptionValue(GEN_OPT).equals(GEN_TESTS)) {
         System.out.println("Generate tests for rest adapters...");
-        JaxrsAdapterTestGenerator adapterTestGen = new JaxrsAdapterTestGenerator(specPath);
-        if (null != mainPackage) {
-          adapterTestGen.setMainPackage(mainPackage);
-        }
-        adapterTestGen.create();
-        adapterTestGen.saveToFiles(outputPath);
+
+        CrudTestsCreator creator = new CrudTestsCreator(outputPath);
+        creator.setBasePackage(mainPackage);
+        creator.create(specPath);
+
       } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_PROJECT)) {
         System.out.println("Generate project...");
         ApplicationStructureCreator creator = new ApplicationStructureCreator(outputPath);
