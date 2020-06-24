@@ -16,7 +16,6 @@ Current versions:
 -o         - output directory
 -pkg       - main package
 -g         - generation options
-   rest    - generate rest adapters
    tests   - generate rest adapters 
    proj    - generate project
 ```
