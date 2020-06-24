@@ -1,16 +1,11 @@
 package org.jepria.tools.openapi.generator.languages.jersey.models.entity;
 
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
+public class RecordDefinitionModel {
 
-public class RecordDefinitionModel extends BaseDtoImpl {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/RecordDefinition.mustache";
 
   private String apiPackage;
   private String className;
-
-  public RecordDefinitionModel() {
-    this.setTemplate(TEMPLATE_FILE_NAME);
-  }
 
   public String getApiPackage() {
     return apiPackage;

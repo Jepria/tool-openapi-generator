@@ -2,22 +2,15 @@ package org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 
-public class DaoModel extends BaseDtoImpl {
-
-  private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/dao/Dao.mustache";
+public class DaoModel {
 
   private String apiPackage;
   private String className;
   private String modelPackage;
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
-
-  public DaoModel() {
-    setTemplate(TEMPLATE_FILE_NAME);
-  }
 
   public String getApiPackage() {
     return apiPackage;

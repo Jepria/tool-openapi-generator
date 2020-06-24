@@ -27,7 +27,7 @@ public abstract class DefaultGenerator implements Generator {
 
   private String fileExtension = ".java";
 
-  private String baseName = "";
+  private String baseName = ""; // Base file name
 
   public abstract void create();
 

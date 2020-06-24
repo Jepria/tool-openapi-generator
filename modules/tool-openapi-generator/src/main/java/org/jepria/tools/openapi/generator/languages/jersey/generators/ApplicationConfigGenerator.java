@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigModel;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsModel;
 
 public class ApplicationConfigGenerator extends DefaultGenerator {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/main/rest/jersey/ApplicationConfig.mustache";
@@ -30,8 +30,8 @@ public class ApplicationConfigGenerator extends DefaultGenerator {
     ApplicationConfigModel dto = new ApplicationConfigModel();
     dto.setMainPackage(this.getMainPackage());
 
-    List<BaseJaxrsDto> adapters = BaseJaxrsDto.getFromSpec(this.getOpenAPI());
-    for (BaseJaxrsDto adapter : adapters) {
+    List<BaseJaxrsModel> adapters = BaseJaxrsModel.getFromSpec(this.getOpenAPI());
+    for (BaseJaxrsModel adapter : adapters) {
       adapter.setApiPackage(this.getMainPackage() + "." + adapter.getClassName().toLowerCase() + ".rest");
     }
     dto.setAdapters(adapters);

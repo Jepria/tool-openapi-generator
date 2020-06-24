@@ -2,10 +2,9 @@ package org.jepria.tools.openapi.generator.languages.jersey.models.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 
-public class ServiceModel extends BaseDtoImpl {
+public class ServiceModel {
 
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/Service.mustache";
 
@@ -14,10 +13,6 @@ public class ServiceModel extends BaseDtoImpl {
   private String modelPackage;
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
-
-  public ServiceModel() {
-    setTemplate(TEMPLATE_FILE_NAME);
-  }
 
   public String getApiPackage() {
     return apiPackage;

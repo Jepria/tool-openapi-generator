@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jepria.tools.openapi.generator.DefaultGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsDto;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsModel;
 
 public class JaxrsAdapterTestGenerator extends DefaultGenerator {
 
@@ -24,9 +24,9 @@ public class JaxrsAdapterTestGenerator extends DefaultGenerator {
   public void create() {
     Map<String, String> map = new HashMap<>();
 
-    List<BaseJaxrsDto> list = BaseJaxrsDto.getFromSpec(this.getOpenAPI());
+    List<BaseJaxrsModel> list = BaseJaxrsModel.getFromSpec(this.getOpenAPI());
 
-    for (BaseJaxrsDto dto : list) {
+    for (BaseJaxrsModel dto : list) {
       dto.setModelPackage("com.technology.jep.jepriashowcase"); //TODO create parameters
       dto.setApiPackage("com.technology.jep.jepriashowcase" + dto.getApiPackage());
       try {
