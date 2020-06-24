@@ -67,6 +67,11 @@ public class DtoModel {
     return className;
   }
 
+  public void setModelPackage(String modelPackage) {
+    this.modelPackage = modelPackage;
+  }
+
+
   private static boolean isSystem(String className) {
     boolean result = false;
 

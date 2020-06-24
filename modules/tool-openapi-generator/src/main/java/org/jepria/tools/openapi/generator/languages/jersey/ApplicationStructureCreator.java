@@ -1,8 +1,10 @@
 package org.jepria.tools.openapi.generator.languages.jersey;
 
+import static org.jepria.tools.openapi.generator.languages.jersey.Templates.APPLICATION_CONFIG_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.CRUD_TEST_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_IMPL_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_TEMPLATE;
+import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DTO_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.POM_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.RECORD_DEFINITION_TEMPLATE;
 import static org.jepria.tools.openapi.generator.languages.jersey.Templates.SERVER_FACTORY_TEMPLATE;
@@ -20,6 +22,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.generators.Applicatio
 import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.dto.DtoGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.entity.rest.JaxrsAdapterGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
+import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.BaseDtoImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.models.PomModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.WebModel;
@@ -28,6 +31,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServerF
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.DtoModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.BaseJaxrsModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.test.JaxrsCrudTestModel;
@@ -64,12 +68,14 @@ public class ApplicationStructureCreator {
   }
 
   public void create(String specFileLocation) throws IOException {
+    OpenAPI openAPI = null;
     try {
-      OpenAPI openAPI = new OpenAPIV3Parser().read(specFileLocation);
-      create(openAPI);
+      openAPI = new OpenAPIV3Parser().read(specFileLocation);
     } catch (Exception e) {
       System.err.println("Cannot read spec from file!");
+      return;
     }
+    create(openAPI);
   }
 
   private void createEntities(OpenAPI spec, String outputFolder) throws IOException {
@@ -91,7 +97,7 @@ public class ApplicationStructureCreator {
       createService(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder);
       createDao(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder + "dao\\");
       createDaoImpl(entityPackage, className, ((BaseJaxrsModel) dto).getOperations(), entityFolder + "dao\\");
-      createDtos(spec, entityFolder + "dto\\");
+      createDtos(spec, entityPackage , className, entityFolder + "dto\\");
       createRecordDefinition(entityPackage, className, entityFolder);
       createCrudTests(entityPackage, className, testFolder);
       //TODO: FieldNames ???
@@ -105,10 +111,20 @@ public class ApplicationStructureCreator {
     generator.saveToFiles(outputFolder);
   }
 
-  private void createDtos(OpenAPI spec, String outputFolder) throws IOException { //TODO: DTO packages missed!!!
-    DtoGenerator generator = new DtoGenerator(spec);
-    generator.create();
-    generator.saveToFiles(outputFolder);
+  private void createDtos(OpenAPI spec, String entityPackage, String className, String outputFolder) throws IOException { //TODO: DTO packages missed!!!
+
+    List<DtoModel> models = DtoModel.getFromSpec(spec);
+
+    String fileName = "Dto.java";
+
+    GeneratorImpl generator = new GeneratorImpl();
+    for (DtoModel model : models) {
+      if (model.getClassName().contains(className)) { // filtered model only for current entity // TODO: needed bugfix
+        model.setModelPackage(entityPackage);
+        generator.generate(model, outputFolder, model.getClassName() + fileName, DTO_TEMPLATE);
+      }
+    }
+
   }
 
   private void createWeb(String outputFolder) throws IOException {
@@ -124,10 +140,13 @@ public class ApplicationStructureCreator {
 
   private void createApplicationConfig(OpenAPI spec, String outputFolder) throws IOException {
     outputFolder = outputFolder + this.getBasePackage().replace(".", "\\") + "\\" + "main\\rest\\";
-    ApplicationConfigGenerator generator = new ApplicationConfigGenerator(spec);
-    generator.setMainPackage(this.getBasePackage());
-    generator.create();
-    generator.saveToFiles(outputFolder);
+
+    ApplicationConfigModel model = ApplicationConfigModel.getFromSpec(spec, this.getBasePackage());
+
+    String fileName = "ApplicationConfig.java";
+
+    GeneratorImpl generator = new GeneratorImpl();
+    generator.generate(model, outputFolder, fileName, APPLICATION_CONFIG_TEMPLATE);
   }
 
   private void createServerFactory(String apiPackage, String className, String outputFolder) throws IOException {
