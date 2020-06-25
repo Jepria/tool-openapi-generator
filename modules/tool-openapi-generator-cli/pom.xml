@@ -6,8 +6,16 @@
 
   <groupId>org.jepria.tools.openapi</groupId>
   <artifactId>generator-cli</artifactId>
-  <version>1.0</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
+  
+  <distributionManagement>
+    <repository>
+      <id>binhome-local-build</id>
+      <name>binhome-local-build-repo</name>
+      <url>file:${BIN_HOME}\build</url>
+    </repository>
+  </distributionManagement>
 
   <build>
     <plugins>
@@ -116,7 +124,7 @@
     <dependency>
       <groupId>org.jepria.tools.openapi</groupId>
       <artifactId>generator</artifactId>
-      <version>1.0</version>
+      <version>0.0.1</version>
     </dependency>
   </dependencies>
 

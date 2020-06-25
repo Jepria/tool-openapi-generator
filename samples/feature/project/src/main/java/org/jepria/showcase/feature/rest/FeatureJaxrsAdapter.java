@@ -1,15 +1,13 @@
-package com.technology.jep.jepriashowcase.feature;
+package org.jepria.showcase.feature.rest;
 
-import com.technology.jep.jepriashowcase.*;
-import com.technology.jep.jepriashowcase.feature.FeatureServerFactory;
+import org.jepria.showcase.feature.dto.*;
+import org.jepria.showcase.feature.FeatureServerFactory;
 import org.jepria.server.data.OptionDto;
 import org.jepria.server.data.SearchRequestDto;
 import org.jepria.server.service.rest.ExtendedResponse;
 import org.jepria.server.service.rest.JaxrsAdapterBase;
 import org.jepria.server.service.security.HttpBasic;
 
-import io.swagger.annotations.ApiParam;
-import io.swagger.jaxrs.*;
 
 
 import java.util.Map;
@@ -22,40 +20,44 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.*;
+import javax.validation.constraints.Pattern;
 
 @Path("/feature")
 
-public class FeatureJaxrsAdapter  {
+public class FeatureJaxrsAdapter extends JaxrsAdapterBase {
 
-protected final EntityEndpointAdapter entityEndpointAdapter = new EntityEndpointAdapter(() -> FeatureServerFactory.getInstance().getEntityService());
+  protected final EntityEndpointAdapter entityEndpointAdapter = new EntityEndpointAdapter(() -> FeatureServerFactory.getInstance().getEntityService());
 
-protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpointAdapter(() -> FeatureServerFactory.getInstance().getSearchService(() -> request.getSession()));
+  protected final SearchEndpointAdapter searchEndpointAdapter = new SearchEndpointAdapter(() -> FeatureServerFactory.getInstance().getSearchService(() -> request.getSession()));
 
   @POST
   @Path("/{featureId}/set-feature-responsible")
   public Response setFeatureResponsible(
       @PathParam("featureId") Integer featureId, 
       @QueryParam("responsibleId") Integer responsibleId) {
-    return delegate.setFeatureResponsible(featureId, responsibleId);
+    FeatureServerFactory.getInstance().getService().setFeatureResponsible( featureId,  responsibleId);
+    return Response.ok().build();
   }
 
   @GET
   @Path("/option/feature-operator")
   public Response getFeatureOperator() {
-    return delegate.getFeatureOperator();
+    List<OptionDto<Integer>> result = FeatureServerFactory.getInstance().getService().getFeatureOperator();
+    return Response.ok(result).build();
   }
 
   @GET
   @Path("/option/feature-status")
   public Response getFeatureStatus() {
-    return delegate.getFeatureStatus();
+    List<OptionDto<String>> result = FeatureServerFactory.getInstance().getService().getFeatureStatus();
+    return Response.ok(result).build();
   }
 
 //------------ entity methods ------------//
   @GET
   @Path("/{recordId}")
   public Response getRecordById(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId) {
-    FeatureDto result = (FeatureDto) entityEndpointAdapter.getRecordById(recordId);
+  FeatureDto result = (FeatureDto) entityEndpointAdapter.getRecordById(recordId);
     return Response.ok(result).build();
   }
 
