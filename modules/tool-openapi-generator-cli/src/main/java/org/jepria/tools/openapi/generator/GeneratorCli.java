@@ -6,10 +6,9 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.DtoGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterGenerator;
-import org.jepria.tools.openapi.generator.languages.jersey.generators.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.ApplicationStructureCreator;
+import org.jepria.tools.openapi.generator.languages.jersey.CrudTestsCreator;
+import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 
 public class GeneratorCli {
 
@@ -25,9 +24,7 @@ public class GeneratorCli {
   public static final  String GEN_OPT      = "g";
   private static final String GEN_OPT_NAME = "generate";
   public static final  String GEN_TESTS    = "tests";
-  public static final  String GEN_REST     = "rest";
   public static final  String GEN_PROJECT  = "proj";
-  private static final String GEN_DTO      = "dto";
 
 
   public static void main(String[] args) throws ParseException, IOException {
@@ -61,35 +58,23 @@ public class GeneratorCli {
 
     if (commandLine.hasOption(PACKAGE_OPT)) {
       mainPackage = commandLine.getOptionValue(PACKAGE_OPT);
+    } else {
+      mainPackage = "org.jepria";
     }
 
     if (commandLine.hasOption(GEN_OPT)) {
-      if (commandLine.getOptionValue(GEN_OPT).equals(GEN_REST)) {
-        System.out.println("Generate rest adapters...");
-        JaxrsAdapterGenerator adapterGen = new JaxrsAdapterGenerator(specPath);
-        if (null != mainPackage) {
-          adapterGen.setMainPackage(mainPackage);
-        }
-        adapterGen.create();
-        adapterGen.saveToFiles(outputPath);
-      } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_TESTS)) {
+      if (commandLine.getOptionValue(GEN_OPT).equals(GEN_TESTS)) {
         System.out.println("Generate tests for rest adapters...");
-        JaxrsAdapterTestGenerator adapterTestGen = new JaxrsAdapterTestGenerator(specPath);
-        if (null != mainPackage) {
-          adapterTestGen.setMainPackage(mainPackage);
-        }
-        adapterTestGen.create();
-        adapterTestGen.saveToFiles(outputPath);
+
+        CrudTestsCreator creator = new CrudTestsCreator(outputPath);
+        creator.setBasePackage(mainPackage);
+        creator.create(specPath);
+
       } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_PROJECT)) {
         System.out.println("Generate project...");
         ApplicationStructureCreator creator = new ApplicationStructureCreator(outputPath);
         creator.setBasePackage(mainPackage);
         creator.create(specPath);
-      } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_DTO)){
-        System.out.println("Generate dtos...");
-        DtoGenerator generator = new DtoGenerator(specPath);
-        generator.create();
-        generator.saveToFiles(outputPath);
       }
     } else {
 

@@ -9,19 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.Map;
-import org.jepria.tools.openapi.generator.languages.jersey.dtos.BaseDtoImpl;
 
 public abstract class DefaultGenerator implements Generator {
 
-  public void setValues(Map<String, String> values) {
-    this.values = values;
-  }
-
   private Map<String, String> values;
-
-  private List<? extends BaseDtoImpl> dtos;
 
   private String templateFileName;
 
@@ -31,7 +23,9 @@ public abstract class DefaultGenerator implements Generator {
 
   private String fileExtension = ".java";
 
-  private String baseName = "";
+  private String baseName = ""; // Base file name
+
+  public abstract void create();
 
   public void saveToFiles(String rootLocation) throws IOException {
 
@@ -55,20 +49,6 @@ public abstract class DefaultGenerator implements Generator {
     }
   }
 
-  public Map<String, String> getValues() {
-    return this.values;
-  }
-
-  public abstract void create();
-
-  public String getTemplateFileName() {
-    return templateFileName;
-  }
-
-  public void setTemplateFileName(String templateFileName) {
-    this.templateFileName = templateFileName;
-  }
-
   protected String fillTemplate(Object dto) throws IOException {
 
     if (null == getClass().getResourceAsStream(this.getTemplateFileName())) {
@@ -83,12 +63,20 @@ public abstract class DefaultGenerator implements Generator {
     return template.execute(dto).replace(", )", ")");
   }
 
-  public void setMainPackage(String mainPackage) {
-    this.mainPackage = mainPackage;
+  public String getTemplateFileName() {
+    return templateFileName;
+  }
+
+  public void setTemplateFileName(String templateFileName) {
+    this.templateFileName = templateFileName;
   }
 
   public String getMainPackage() {
     return mainPackage;
+  }
+
+  public void setMainPackage(String mainPackage) {
+    this.mainPackage = mainPackage;
   }
 
   public OpenAPI getOpenAPI() {
@@ -115,11 +103,11 @@ public abstract class DefaultGenerator implements Generator {
     this.baseName = baseName;
   }
 
-  public void setDtos(List<? extends BaseDtoImpl> dtos) {
-    this.dtos = dtos;
+  public Map<String, String> getValues() {
+    return this.values;
   }
 
-  public List<? extends BaseDtoImpl> getDtos() {
-    return dtos;
+  public void setValues(Map<String, String> values) {
+    this.values = values;
   }
 }

@@ -8,21 +8,26 @@ The reference project for generated files [jepria-showcase](https://github.com/J
 ### Binary files
 Binary files placed in [bin-repo](https://github.com/Jepria/bin-repo).
 Current versions: 
-  [generator-cli-1.0.jar](https://github.com/Jepria/bin-repo/blob/master/build/org/jepria/tools/openapi/generator-cli/1.0/generator-cli-1.0.jar)
-  [generator-1.0.jar](https://github.com/Jepria/bin-repo/blob/master/build/org/jepria/tools/openapi/generator/1.0/generator-1.0.jar)
+  [generator-cli-1.0.jar](https://github.com/Jepria/bin-repo/blob/master/build/org/jepria/tools/openapi/generator-cli/0.0.1/generator-cli-0.0.1.jar)
+  [generator-1.0.jar](https://github.com/Jepria/bin-repo/blob/master/build/org/jepria/tools/openapi/generator/0.0.1/generator-0.0.1.jar)
 ### Command line options
 ```
 -i         - input specification file
 -o         - output directory
+-pkg       - main package
 -g         - generation options
-   rest    - generate rest adapters
    tests   - generate rest adapters 
    proj    - generate project
 ```
 
 #### Example use of generator-cli.jar from bin repository.
+##### Generate project
 ```
-java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/1.0/generator-cli-1.0.jar -i samples/swagger.json -o samples/feature/rest/ -g rest
+java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/0.0.1/generator-cli-0.0.1.jar -i samples/swagger.json -o samples/feature/project/ -g proj -pkg org.jepria.showcase
+```
+##### Generate tests
+```
+java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/0.0.1/generator-cli-0.0.1.jar -i samples/swagger.json -o samples/feature/test/ -g tests -pkg org.jepria.showcase
 ```
 ### Build projects
 To build from source, you need the following installed and available in your $PATH:
