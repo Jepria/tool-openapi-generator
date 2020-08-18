@@ -29,7 +29,7 @@ java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/0.0.1/generato
 ```
 java -jar %BIN_HOME%/build/org/jepria/tools/openapi/generator-cli/0.0.1/generator-cli-0.0.1.jar -i samples/swagger.json -o samples/feature/test/ -g tests -pkg org.jepria.showcase
 ```
-### Build projects
+## Build projects
 To build from source, you need the following installed and available in your $PATH:
 * [Java 8](https://www.oracle.com/technetwork/java/index.html)
 * [Apache Maven ](https://maven.apache.org/)
@@ -38,5 +38,5 @@ After cloning the project, you can build it from source with this command:
 ```sh
 mvn clean install
 ```
-### Customizing
+## Customizing
 To change output file you can modify [mustache template files](https://github.com/Jepria/tool-openapi-generator/tree/master/modules/tool-openapi-generator/src/main/resources/mustache-templates).
