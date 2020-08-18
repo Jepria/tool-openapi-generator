@@ -52,7 +52,7 @@ public class CrudTestsCreator {
       dto.setClassName(className);
       dto.setModelPackage(entityPackage + ".dto");
 
-      String fileName = className + "JaxrsCrudTestIT.java";
+      String fileName = className + "JaxrsAdapterCrudTestIT.java";
 
       GeneratorImpl generator = new GeneratorImpl();
 
