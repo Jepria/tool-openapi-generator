@@ -37,7 +37,6 @@
         "tags": ["feature: entity"],
         "summary": "Get record by ID",
         "description": "",
-        "operationId": "getRecordById-feature",
         "parameters": [
           {
             "name": "recordId",

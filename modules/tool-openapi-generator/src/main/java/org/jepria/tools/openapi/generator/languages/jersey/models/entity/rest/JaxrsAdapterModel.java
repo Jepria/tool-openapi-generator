@@ -167,7 +167,7 @@ public class JaxrsAdapterModel {
     String operationName = operation.getOperationId();
 
     if (null == operationName) {
-      System.out.println("Can't set operationName for operation: " + httpMethod + " " + path);
+      operationName = httpMethod + StringUtils.sanitizeName(path);
     }
 
     if (null != path) {
