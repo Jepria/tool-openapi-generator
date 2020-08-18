@@ -42,7 +42,9 @@ public class SearchJaxrsOperation extends JaxrsOperation {
   }
 
   public static boolean isSearch(Operation oas3Operation) {
-    return searchMap.entrySet().stream().anyMatch(opId -> oas3Operation.getOperationId().equals(opId.getValue()));
+    return searchMap.entrySet().stream().anyMatch(opId ->
+        null != oas3Operation.getOperationId() && oas3Operation.getOperationId().equals(opId.getValue())
+    );
   }
 
 }

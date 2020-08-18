@@ -1,6 +1,7 @@
 package org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations;
 
 import io.swagger.v3.oas.models.Operation;
+
 import java.util.HashMap;
 
 public class CrudJaxrsOperation extends JaxrsOperation {
@@ -37,7 +38,8 @@ public class CrudJaxrsOperation extends JaxrsOperation {
   }
 
   public static boolean isCrud(Operation oas3Operation) {
-    //TODO: заменить на
-    return crudMap.entrySet().stream().anyMatch(opId -> oas3Operation.getOperationId().startsWith(opId.getValue() + "-"));
+    return crudMap.entrySet().stream().anyMatch(opId ->
+        null != oas3Operation.getOperationId() && oas3Operation.getOperationId().startsWith(opId.getValue() + "-")
+    );
   }
 }

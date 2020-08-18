@@ -87,7 +87,7 @@ public class {{className}}JaxrsAdapter extends JaxrsAdapterBase {
   @GET
   @Path("/{recordId}")
   public Response getRecordById(@Pattern(regexp = "\\d+", message = "ID must be an integer") @PathParam("recordId") String recordId) {
-  {{className}}Dto result = ({{className}}Dto) entityEndpointAdapter.getRecordById(recordId);
+    {{className}}Dto result = ({{className}}Dto) entityEndpointAdapter.getRecordById(recordId);
     return Response.ok(result).build();
   }
   {{/isRead}}
