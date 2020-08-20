@@ -101,7 +101,7 @@ public class DtoModel {
     } else if (schema instanceof DateSchema) {
       result = "Date";
     } else if (schema instanceof DateTimeSchema) {
-      result = "DateTime";
+      result = "Date";
     } else if (schema instanceof ObjectSchema) {
       result = "Object";
     } else if (schema instanceof ArraySchema) {
