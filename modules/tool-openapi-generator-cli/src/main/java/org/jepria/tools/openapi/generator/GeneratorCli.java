@@ -84,7 +84,7 @@ public class GeneratorCli {
 
         CrudTestsCreator creator = new CrudTestsCreator(outputPath);
         creator.setBasePackage(mainPackage);
-        creator.create(specPath);
+        creator.create(specContent);
 
       } else if (commandLine.getOptionValue(GEN_OPT).equals(GEN_PROJECT)) {
         System.out.println("Generate project...");
