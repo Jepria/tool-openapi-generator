@@ -1,5 +1,7 @@
 package org.jepria.tools.openapi.generator;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -48,6 +50,20 @@ public class GeneratorCli {
       System.out.println("Set OpenApi specification file");
       return;
     }
+
+    BufferedReader reader = new BufferedReader(new FileReader(specPath));
+    StringBuilder stringBuilder = new StringBuilder();
+    String line = null;
+    String ls = System.getProperty("line.separator");
+    while ((line = reader.readLine()) != null) {
+      stringBuilder.append(line);
+      stringBuilder.append(ls);
+    }
+    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+    reader.close();
+
+    String specContent = stringBuilder.toString();
+
     if (commandLine.hasOption(OUTPUT_OPT)) {
       System.out.println(commandLine.getOptionValue(OUTPUT_OPT));
       outputPath = commandLine.getOptionValue(OUTPUT_OPT);
@@ -74,7 +90,7 @@ public class GeneratorCli {
         System.out.println("Generate project...");
         ApplicationStructureCreator creator = new ApplicationStructureCreator(outputPath);
         creator.setBasePackage(mainPackage);
-        creator.create(specPath);
+        creator.create(specContent);
       }
     } else {
 

@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import org.jepria.tools.openapi.generator.GeneratorImpl;
 import org.jepria.tools.openapi.generator.languages.jersey.generators.test.rest.JaxrsAdapterTestGenerator;
 import org.jepria.tools.openapi.generator.languages.jersey.models.ApplicationConfigModel;
@@ -63,12 +65,13 @@ public class ApplicationStructureCreator {
     createPom(this.getBasePackage(), this.outputFolderName + "\\");
   }
 
-  public void create(String specFileLocation) throws IOException {
+  public void create(String spec) throws IOException {
     OpenAPI openAPI = null;
     try {
-      openAPI = new OpenAPIV3Parser().read(specFileLocation);
+      SwaggerParseResult parseResult = new OpenAPIV3Parser().readContents(spec);
+      openAPI = parseResult.getOpenAPI();
     } catch (Exception e) {
-      System.err.println("Cannot read spec from file!");
+      System.err.println("Cannot parse spec!");
       return;
     }
     create(openAPI);
