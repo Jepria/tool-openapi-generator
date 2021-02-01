@@ -1,20 +1,20 @@
 package {{apiPackage}};
 
-import {{apiPackage}}.dto.{{className}}CreateDto;
-import {{apiPackage}}.dto.{{className}}Dto;
-import {{apiPackage}}.dto.{{className}}SearchDto;
-import {{apiPackage}}.dto.{{className}}UpdateDto;
+import {{apiPackage}}.dto.{{entityName}}CreateDto;
+import {{apiPackage}}.dto.{{entityName}}Dto;
+import {{apiPackage}}.dto.{{entityName}}SearchDto;
+import {{apiPackage}}.dto.{{entityName}}UpdateDto;
 
 import org.jepria.server.data.RecordDefinitionDtoImpl;
 
 // TODO скорее всего, имеет смысл по-прежнему поддерживать синглтон этого класса, чтобы не выполнять тяжеловесную инициализацию почём зря
-public class {{className}}RecordDefinition extends RecordDefinitionDtoImpl {
+public class {{entityName}}RecordDefinition extends RecordDefinitionDtoImpl {
 
-  public {{className}}RecordDefinition() {
-    super({{className}}CreateDto.class,
-          {{className}}Dto.class,
-          {{className}}SearchDto.class,
-          {{className}}UpdateDto.class
+  public {{entityName}}RecordDefinition() {
+    super({{entityName}}CreateDto.class,
+          {{entityName}}Dto.class,
+          {{entityName}}SearchDto.class,
+          {{entityName}}UpdateDto.class
     );
   }
 

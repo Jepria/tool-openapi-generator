@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 
-public class {{className}}JaxrsAdapterCrudTestIT {
+public class {{entityName}}JaxrsAdapterCrudTestIT {
 
   private static final String ENTITY_URL = "http://localhost:8080/";
   private static final String OPERATOR_NAME = "name";
@@ -28,20 +28,20 @@ public class {{className}}JaxrsAdapterCrudTestIT {
 
   @Test
   public void recordCrudTest() {
-    {{className}}Dto dto = createRandomMinimal{{className}}Dto();
-    String location = create{{className}}(dto);
-    {{className}}Dto createdDto = setMinimal{{className}}Dto(get{{className}}(location));
+    {{entityName}}Dto dto = createRandomMinimal{{entityName}}Dto();
+    String location = create{{entityName}}(dto);
+    {{entityName}}Dto createdDto = setMinimal{{entityName}}Dto(get{{entityName}}(location));
     Assertions.assertTrue(equalsEntities(dto, createdDto), "New dto and created dto are different");
 
-    {{className}}Dto newDto = createRandomMinimal{{className}}Dto();
-    update{{className}}(newDto, location);
-    {{className}}Dto updatedDto = setMinimal{{className}}Dto(get{{className}}(location));
+    {{entityName}}Dto newDto = createRandomMinimal{{entityName}}Dto();
+    update{{entityName}}(newDto, location);
+    {{entityName}}Dto updatedDto = setMinimal{{entityName}}Dto(get{{entityName}}(location));
     Assertions.assertTrue(equalsEntities(newDto, updatedDto), "New dto for updating and updated dto are different");
 
-    delete{{className}}(location);
+    delete{{entityName}}(location);
   }
 
-  private String create{{className}}({{className}}Dto testDto) {
+  private String create{{entityName}}({{entityName}}Dto testDto) {
     Response postResponse = RestAssured.given()
             .auth()
             .basic(OPERATOR_NAME, OPERATOR_PASSWORD)
@@ -52,7 +52,7 @@ public class {{className}}JaxrsAdapterCrudTestIT {
     return postResponse.getHeader("Location");
   }
 
-  private {{className}}Dto get{{className}}(String location) {
+  private {{entityName}}Dto get{{entityName}}(String location) {
     Response response = RestAssured.given()
             .auth()
             .basic(OPERATOR_NAME, OPERATOR_PASSWORD)
@@ -60,10 +60,10 @@ public class {{className}}JaxrsAdapterCrudTestIT {
             .get(location);
     Assertions.assertEquals(200, response.statusCode());
     Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
-    return gson.fromJson(response.asString(), {{className}}Dto.class);
+    return gson.fromJson(response.asString(), {{entityName}}Dto.class);
   }
 
-  private void update{{className}}({{className}}Dto testDto, String location) {
+  private void update{{entityName}}({{entityName}}Dto testDto, String location) {
     Response putResponse = RestAssured.given()
             .auth()
             .basic(OPERATOR_NAME, OPERATOR_PASSWORD)
@@ -74,7 +74,7 @@ public class {{className}}JaxrsAdapterCrudTestIT {
     Assertions.assertEquals(200, statusCode);
   }
 
-  private void delete{{className}}(String location) {
+  private void delete{{entityName}}(String location) {
     RequestSpecification requestDelete = RestAssured.given()
             .auth()
             .basic(OPERATOR_NAME, OPERATOR_PASSWORD);                
@@ -83,14 +83,14 @@ public class {{className}}JaxrsAdapterCrudTestIT {
     Assertions.assertEquals(200, deleteResponse.statusCode()); //TODO: maybe should be 204
   }
 
-  private {{className}}Dto createRandomMinimal{{className}}Dto() {
-    {{className}}Dto dto = new {{className}}Dto();
+  private {{entityName}}Dto createRandomMinimal{{entityName}}Dto() {
+    {{entityName}}Dto dto = new {{entityName}}Dto();
     //TODO
 
     return dto;
   }
 
-  private {{className}}Dto setMinimal{{className}}Dto({{className}}Dto dto) {
+  private {{entityName}}Dto setMinimal{{entityName}}Dto({{entityName}}Dto dto) {
     //TODO
 
     return dto;

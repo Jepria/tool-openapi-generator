@@ -5,7 +5,7 @@ public class RecordDefinitionModel {
   private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/RecordDefinition.mustache";
 
   private String apiPackage;
-  private String className;
+  private String entityName;
 
   public String getApiPackage() {
     return apiPackage;
@@ -15,11 +15,11 @@ public class RecordDefinitionModel {
     this.apiPackage = apiPackage;
   }
 
-  public String getClassName() {
-    return className;
+  public String getEntityName() {
+    return entityName;
   }
 
-  public void setClassName(String className) {
-    this.className = className;
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
   }
 }

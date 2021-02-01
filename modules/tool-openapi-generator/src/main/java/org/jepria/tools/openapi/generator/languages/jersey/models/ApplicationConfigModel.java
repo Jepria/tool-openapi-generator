@@ -23,7 +23,7 @@ public class ApplicationConfigModel {
 
     List<JaxrsAdapterModel> adapters = JaxrsAdapterModel.getFromSpec(spec);
     for (JaxrsAdapterModel adapter : adapters) {
-      adapter.setApiPackage(mainPackage + "." + adapter.getClassName().toLowerCase() + ".rest");
+      adapter.setApiPackage(mainPackage + "." + adapter.getEntityName().toLowerCase() + ".rest");
     }
 
     model.setAdapters(adapters);

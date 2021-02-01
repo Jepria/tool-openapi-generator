@@ -2,7 +2,7 @@ package {{mainPackage}}.main.rest.jersey;
 
 import com.technology.jep.jepria.shared.exceptions.ApplicationException;
 {{#adapters}}
-import {{apiPackage}}.{{className}}JaxrsAdapter;
+import {{apiPackage}}.{{entityName}}JaxrsAdapter;
 {{/adapters}}  
 import org.jepria.server.service.rest.jersey.ApplicationConfigBase;
 
@@ -15,7 +15,7 @@ public class ApplicationConfig extends ApplicationConfigBase {
   
   public ApplicationConfig() {
     {{#adapters}}
-    register({{className}}JaxrsAdapter.class);
+    register({{entityName}}JaxrsAdapter.class);
     {{/adapters}}   
 
     register(new ExceptionMapper<ApplicationException>() {

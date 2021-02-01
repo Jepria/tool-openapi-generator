@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}Dto;
-import com.technology.jep.jepriashowcase.feature.dto.{{className}}SearchDto;
+import com.technology.jep.jepriashowcase.feature.dto.{{entityName}}Dto;
+import com.technology.jep.jepriashowcase.feature.dto.{{entityName}}SearchDto;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class {{className}}JaxrsAdapterTestIT {
+public class {{entityName}}JaxrsAdapterTestIT {
 
   private static final String baseUrl          = ""; // TODO
   private static final String operatorName     = ""; // TODO
@@ -51,7 +51,7 @@ public class {{className}}JaxrsAdapterTestIT {
   public void createRecordTest() {
     String testUrl = baseUrl;
 
-    {{className}}Dto testDto = new {{className}}Dto();
+    {{entityName}}Dto testDto = new {{entityName}}Dto();
     //TODO: set DTO fields
 
     RequestSpecification requestPost =
@@ -83,7 +83,7 @@ public class {{className}}JaxrsAdapterTestIT {
 
     String testUrl = baseUrl + "/" + recordId;
 
-    {{className}}Dto testDto = new {{className}}Dto();
+    {{entityName}}Dto testDto = new {{entityName}}Dto();
     //TODO: set DTO fields
 
     RequestSpecification requestPost =
@@ -120,7 +120,7 @@ public class {{className}}JaxrsAdapterTestIT {
 /**********************************************/
 {{#hasCrud}}
   // CRUD complex test
-  private String createRecord({{className}}Dto testDto, String location) {
+  private String createRecord({{entityName}}Dto testDto, String location) {
     RequestSpecification requestPost =
         RestAssured.given().auth().basic(operatorName, operatorPassword)
             .header("Content-Type", "application/json")
@@ -133,11 +133,11 @@ public class {{className}}JaxrsAdapterTestIT {
     return postResponse.getHeader("Location");
   }
 
-  private void updateRecord({{className}}Dto testDto, Integer recordId) {
+  private void updateRecord({{entityName}}Dto testDto, Integer recordId) {
     updateRecord(testDto, baseUrl + "/" + recordId);
   }
 
-  private void updateRecord({{className}}Dto testDto, String location) {
+  private void updateRecord({{entityName}}Dto testDto, String location) {
     RequestSpecification requestPost =
         RestAssured.given().auth().basic(operatorName, operatorPassword)
             .header("Content-Type", "application/json")
@@ -148,14 +148,14 @@ public class {{className}}JaxrsAdapterTestIT {
     Assert.assertEquals(200, statusCode);
   }
 
-  private {{className}}Dto getRecord(String location) {
+  private {{entityName}}Dto getRecord(String location) {
     Response response = RestAssured.given().auth().basic(operatorName, operatorPassword).when().get(location);
     Assert.assertEquals(location, 200, response.statusCode());
     Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
-    return gson.fromJson(response.asString(), {{className}}Dto.class);
+    return gson.fromJson(response.asString(), {{entityName}}Dto.class);
   }
 
-  private {{className}}Dto getRecord(Integer recordId) {
+  private {{entityName}}Dto getRecord(Integer recordId) {
     String testUrl = baseUrl + "/" + recordId;
     return getRecord(testUrl);
   }
@@ -175,27 +175,27 @@ public class {{className}}JaxrsAdapterTestIT {
   }
 
   @Test
-  public void {{className}}CrudTest() {
+  public void {{entityName}}CrudTest() {
     String testUrl = baseUrl;
 
-    {{className}}Dto dto = new {{className}}Dto();
+    {{entityName}}Dto dto = new {{entityName}}Dto();
     //TODO: set DTO fields
-    dto.set{{className}}Name("name");
-    dto.set{{className}}NameEn("name");
+    dto.set{{entityName}}Name("name");
+    dto.set{{entityName}}NameEn("name");
     dto.setDescription("TestDescription");
 
     String location = createRecord(dto, testUrl);
 
-    {{className}}Dto createdDto = getRecord(location);
+    {{entityName}}Dto createdDto = getRecord(location);
     //TODO: compare dto and createdDto
 
-    {{className}}Dto newDto = new {{className}}Dto();
-    newDto.set{{className}}Name("newName");
-    newDto.set{{className}}NameEn("newName");
+    {{entityName}}Dto newDto = new {{entityName}}Dto();
+    newDto.set{{entityName}}Name("newName");
+    newDto.set{{entityName}}NameEn("newName");
 
     updateRecord(newDto, location);
 
-    {{className}}Dto updatedDto = getRecord(location);
+    {{entityName}}Dto updatedDto = getRecord(location);
     //TODO: compare newDto and updatedDto
 
     deleteRecord(location);
@@ -203,7 +203,7 @@ public class {{className}}JaxrsAdapterTestIT {
 {{/hasCrud}}
 {{#hasSearch}}
   // test search API
-  private String postSearchRequest(SearchRequestDto<{{className}}SearchDto> searchRequestDto, String location) {
+  private String postSearchRequest(SearchRequestDto<{{entityName}}SearchDto> searchRequestDto, String location) {
 
     RequestSpecification request =
         RestAssured.given().auth().basic(operatorName, operatorPassword)
@@ -216,7 +216,7 @@ public class {{className}}JaxrsAdapterTestIT {
     return postResponse.getHeader("location");
   }
 
-  private SearchRequestDto<{{className}}SearchDto> getSearchRequest(String searchLocation) {
+  private SearchRequestDto<{{entityName}}SearchDto> getSearchRequest(String searchLocation) {
     RequestSpecification request =
         RestAssured.given().auth().basic(operatorName, operatorPassword);
 
@@ -226,7 +226,7 @@ public class {{className}}JaxrsAdapterTestIT {
     return new Gson().fromJson(response.asString(), SearchRequestDto.class);
   }
 
-  private Integer get{{className}}SearchResultSetSize(String location) {
+  private Integer get{{entityName}}SearchResultSetSize(String location) {
     String testUrl = location + "/resultset-size";
 
     RequestSpecification request =
@@ -238,7 +238,7 @@ public class {{className}}JaxrsAdapterTestIT {
     return response.getBody().as(Integer.TYPE);
   }
 
-  private {{className}}Dto get{{className}}Result(String location) {
+  private {{entityName}}Dto get{{entityName}}Result(String location) {
     RequestSpecification request =
         RestAssured.given().auth().basic(operatorName, operatorPassword);
 
@@ -247,26 +247,26 @@ public class {{className}}JaxrsAdapterTestIT {
     Assert.assertEquals(200, response.statusCode());
 
     Gson gson = new GsonBuilder().create();
-    return gson.fromJson(response.asString(), {{className}}Dto.class);
+    return gson.fromJson(response.asString(), {{entityName}}Dto.class);
   }
 
   @Test
-  public void {{className}}SearchTest() {
+  public void {{entityName}}SearchTest() {
     String testUrl = baseUrl + "/search";
 
-    SearchRequestDto<{{className}}SearchDto> searchRequestDto = new SearchRequestDto<>();
+    SearchRequestDto<{{entityName}}SearchDto> searchRequestDto = new SearchRequestDto<>();
 
-    {{className}}SearchDto searchDto = new {{className}}SearchDto();
-    searchDto.set{{className}}Id(151);
+    {{entityName}}SearchDto searchDto = new {{entityName}}SearchDto();
+    searchDto.set{{entityName}}Id(151);
     searchRequestDto.setTemplate(searchDto);
 
     String searchLocation = postSearchRequest(searchRequestDto, testUrl);
 
-    SearchRequestDto<{{className}}SearchDto> readRequest = getSearchRequest(searchLocation);
+    SearchRequestDto<{{entityName}}SearchDto> readRequest = getSearchRequest(searchLocation);
     //TODO: compare SearchRequestDto-s
 
-    if (get{{className}}SearchResultSetSize(searchLocation) > 0) {
-      get{{className}}Result(searchLocation);
+    if (get{{entityName}}SearchResultSetSize(searchLocation) > 0) {
+      get{{entityName}}Result(searchLocation);
     }
 
   }

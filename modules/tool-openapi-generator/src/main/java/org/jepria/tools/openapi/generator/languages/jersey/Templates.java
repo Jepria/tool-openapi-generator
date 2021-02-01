@@ -7,6 +7,7 @@ public class Templates {
   public static final String DTO_TEMPLATE                = "/mustache-templates/service-rest/src/main/java/entity/dto/Dto.mustache";
   public static final String JAXRS_ADAPTER_TEMPLATE      = "/mustache-templates/service-rest/src/main/java/entity/rest/JaxrsAdapter.mustache";
   public static final String SERVICE_TEMPLATE            = "/mustache-templates/service-rest/src/main/java/entity/Service.mustache";
+  public static final String SERVICEIMPL_TEMPLATE        = "/mustache-templates/service-rest/src/main/java/entity/ServiceImpl.mustache";
   public static final String SERVER_FACTORY_TEMPLATE     = "/mustache-templates/service-rest/src/main/java/entity/ServerFactory.mustache";
   public static final String RECORD_DEFINITION_TEMPLATE  = "/mustache-templates/service-rest/src/main/java/entity/RecordDefinition.mustache";
   public static final String FIELD_NAMES_TEMPLATE        = "/mustache-templates/service-rest/src/main/java/entity/FieldNames.mustache";

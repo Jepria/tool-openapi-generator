@@ -1,17 +1,5 @@
 package org.jepria.tools.openapi.generator.languages.jersey;
 
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.APPLICATION_CONFIG_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.CRUD_TEST_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_IMPL_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DAO_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.DTO_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.JAXRS_ADAPTER_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.POM_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.RECORD_DEFINITION_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.SERVER_FACTORY_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.SERVICE_TEMPLATE;
-import static org.jepria.tools.openapi.generator.languages.jersey.Templates.WEB_TEMPLATE;
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import java.io.File;
@@ -27,6 +15,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.models.PomModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.WebModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.RecordDefinitionModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServerFactoryModel;
+import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceImplModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.ServiceModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoImplModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dao.DaoModel;
@@ -34,6 +23,8 @@ import org.jepria.tools.openapi.generator.languages.jersey.models.entity.dto.Dto
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.JaxrsAdapterModel;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 import org.jepria.tools.openapi.generator.languages.jersey.models.test.JaxrsCrudTestModel;
+
+import static org.jepria.tools.openapi.generator.languages.jersey.Templates.*;
 
 public class ApplicationStructureCreator {
 
@@ -88,14 +79,15 @@ public class ApplicationStructureCreator {
     GeneratorImpl generator = new GeneratorImpl();
 
     for (JaxrsAdapterModel model : models) {
-      String className     = model.getClassName();
+      String className     = model.getEntityName();
       String entityFolder  = srcFolder + className.toLowerCase() + "\\";
       String entityPackage = this.getBasePackage() + "." + className.toLowerCase();
 
-      generator.generate(model, entityFolder + "rest\\", model.getClassName() + fileName, JAXRS_ADAPTER_TEMPLATE);
+      generator.generate(model, entityFolder + "rest\\", model.getEntityName() + fileName, JAXRS_ADAPTER_TEMPLATE);
 
       createServerFactory(entityPackage, className, entityFolder);
       createService(entityPackage, className, model.getOperations(), entityFolder);
+      createServiceImpl(entityPackage, className, model.getOperations(), entityFolder);
       createDao(entityPackage, className, model.getOperations(), entityFolder + "dao\\");
       createDaoImpl(entityPackage, className, model.getOperations(), entityFolder + "dao\\");
       createDtos(spec, entityPackage, className, entityFolder + "dto\\");
@@ -112,7 +104,7 @@ public class ApplicationStructureCreator {
     generator.saveToFiles(outputFolder);
   }
 
-  private void createDtos(OpenAPI spec, String entityPackage, String className, String outputFolder) throws IOException {
+  private void createDtos(OpenAPI spec, String entityPackage, String entityName, String outputFolder) throws IOException {
 
     List<DtoModel> models = DtoModel.getFromSpec(spec);
 
@@ -120,9 +112,9 @@ public class ApplicationStructureCreator {
 
     GeneratorImpl generator = new GeneratorImpl();
     for (DtoModel model : models) {
-      if (model.getClassName().contains(className)) { // filtered model only for current entity // TODO: needed bugfix
+      if (model.getEntityName().contains(entityName)) { // filtered model only for current entity // TODO: needed bugfix
         model.setModelPackage(entityPackage);
-        generator.generate(model, outputFolder, model.getClassName() + fileExt, DTO_TEMPLATE);
+        generator.generate(model, outputFolder, model.getEntityName() + fileExt, DTO_TEMPLATE);
       }
     }
 
@@ -150,67 +142,81 @@ public class ApplicationStructureCreator {
     generator.generate(model, outputFolder, fileName, APPLICATION_CONFIG_TEMPLATE);
   }
 
-  private void createServerFactory(String apiPackage, String className, String outputFolder) throws IOException {
+  private void createServerFactory(String apiPackage, String entityName, String outputFolder) throws IOException {
     ServerFactoryModel dto = new ServerFactoryModel();
 
     dto.setApiPackage(apiPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
 
-    String fileName = className + "ServerFactory.java";
+    String fileName = entityName + "ServerFactory.java";
 
     GeneratorImpl generator = new GeneratorImpl();
     generator.generate(dto, outputFolder, fileName, SERVER_FACTORY_TEMPLATE);
   }
 
-  private void createService(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+  private void createService(String apiPackage, String entityName, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
     ServiceModel dto = new ServiceModel();
 
     dto.setApiPackage(apiPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
 
-    String fileName = className + "Service.java";
+    String fileName = entityName + "Service.java";
 
     GeneratorImpl generator = new GeneratorImpl();
     generator.generate(dto, outputFolder, fileName, SERVICE_TEMPLATE);
   }
 
-  private void createDao(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
-    DaoModel dto = new DaoModel();
+  private void createServiceImpl(String apiPackage, String entityName, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+    ServiceImplModel dto = new ServiceImplModel();
 
     dto.setApiPackage(apiPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
 
-    String fileName = className + "Dao.java";
+    String fileName = entityName + "ServiceImpl.java";
+
+    GeneratorImpl generator = new GeneratorImpl();
+    generator.generate(dto, outputFolder, fileName, SERVICEIMPL_TEMPLATE);
+  }
+
+  private void createDao(String apiPackage, String entityName, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+    DaoModel dto = new DaoModel();
+
+    dto.setApiPackage(apiPackage);
+    dto.setEntityName(entityName);
+    dto.setOperations(operations);
+    dto.setModelPackage(apiPackage + "." + "dto");
+
+    String fileName = entityName + "Dao.java";
 
     GeneratorImpl generator = new GeneratorImpl();
     generator.generate(dto, outputFolder, fileName, DAO_TEMPLATE);
   }
 
-  private void createDaoImpl(String apiPackage, String className, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
+  private void createDaoImpl(String apiPackage, String entityName, List<OtherJaxrsOperation> operations, String outputFolder) throws IOException {
     DaoImplModel dto = new DaoImplModel();
 
     dto.setApiPackage(apiPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
     dto.setOperations(operations);
     dto.setModelPackage(apiPackage + "." + "dto");
 
-    String fileName = className + "DaoImpl.java";
+    String fileName = entityName + "DaoImpl.java";
 
     GeneratorImpl generator = new GeneratorImpl();
     generator.generate(dto, outputFolder, fileName, DAO_IMPL_TEMPLATE);
   }
 
-  private void createRecordDefinition(String apiPackage, String className, String outputFolder) throws IOException {
+  private void createRecordDefinition(String apiPackage, String entityName, String outputFolder) throws IOException {
     RecordDefinitionModel dto = new RecordDefinitionModel();
 
     dto.setApiPackage(apiPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
 
-    String fileName = className + "RecordDefinition.java";
+    String fileName = entityName + "RecordDefinition.java";
 
     GeneratorImpl generator = new GeneratorImpl();
     generator.generate(dto, outputFolder, fileName, RECORD_DEFINITION_TEMPLATE);
@@ -228,13 +234,13 @@ public class ApplicationStructureCreator {
     generator.generate(model, outputFolder, fileName, POM_TEMPLATE);
   }
 
-  private void createCrudTests(String entityPackage, String className, String outputFolder) throws IOException {
+  private void createCrudTests(String entityPackage, String entityName, String outputFolder) throws IOException {
     JaxrsCrudTestModel dto = new JaxrsCrudTestModel();
     dto.setApiPackage(entityPackage);
-    dto.setClassName(className);
+    dto.setEntityName(entityName);
     dto.setModelPackage(entityPackage + ".dto");
 
-    String fileName = className + "JaxrsAdapterCrudTestIT.java";
+    String fileName = entityName + "JaxrsAdapterCrudTestIT.java";
 
     GeneratorImpl generator = new GeneratorImpl();
 

@@ -4,12 +4,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>{{basePackage}}</groupId>
+    <groupId>{{basePackage}}</groupId>
   <artifactId>{{applicationName}}</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>service-rest Maven Webapp</name>
-  <url>http://jepria.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,12 +15,10 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <jersey.version>2.29</jersey.version>
     <antcontrib.version>1.0b3</antcontrib.version>
-    <jepria.version>11.1.0-SNAPSHOT</jepria.version>
+    <jepria.version>12.3.0-SNAPSHOT</jepria.version>
     <jepriatoolkit.version>7.15.0</jepriatoolkit.version>
     <tomcat.version>7.0.68</tomcat.version>
     <log4j.version>1.2.17</log4j.version>
-    <gwtlog.version>3.2.1</gwtlog.version>
-    <gwt.version>2.8.0</gwt.version>
     <commonsfileupload.version>1.3.3</commonsfileupload.version>
     <commonsio.version>2.4</commonsio.version>
     <jakartawsrsapi.version>2.1.5</jakartawsrsapi.version>
@@ -32,27 +28,31 @@
     <jakartajsonbindapi.version>1.0.1</jakartajsonbindapi.version>
     <swaggerui.version>3.10.0</swaggerui.version>
     <project.build.finalName>jepriashowcase-service-rest</project.build.finalName>
+    <project.build.outputDirectory>res</project.build.outputDirectory>
+    <mockito.version>3.5.7</mockito.version>
   </properties>
 
+<!--  <parent>-->
+<!--    &lt;!&ndash; Эти параметры должны в точности совпадать с аналогичными параметрами в родительском pom.xml &ndash;&gt;-->
+<!--    <groupId>org.jepria.jepriashowcase</groupId>-->
+<!--    <artifactId>JepRiaShowcase</artifactId>-->
+<!--    <version>12.0.0</version>-->
+<!--  </parent>-->
+
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
     <!-- Jepria obsolete runtime dependencies -->
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>nimbus-jose-jwt</artifactId>
+      <version>7.9</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jepria</groupId>
+      <artifactId>oauth-sdk</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <!-- TODO Эти зависимости не нужны для Rest/Jersey, они нужны для функционирования текущей версии Джеприи в целом. Необходимо убрать эти зависимости со временем -->
-    <dependency>
-      <groupId>com.allen-sauer.gwt.log</groupId>
-      <artifactId>gwt-log</artifactId>
-      <version>${gwtlog.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-servlet</artifactId>
-      <version>${gwt.version}-customized</version>
-    </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
@@ -121,7 +121,7 @@
     <!-- JepRia -->
     <dependency>
       <groupId>org.jepria</groupId>
-      <artifactId>jepria</artifactId>
+      <artifactId>jepria-rest</artifactId>
       <version>${jepria.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -148,8 +148,8 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>4.1.0.Final</version>
-      <scope>compile</scope>
+      <version>5.4.3.Final</version>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -161,8 +161,65 @@
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>4.1.2</version>
+      <scope>integration-test</scope>
+    </dependency>
+    <!--Jersey bean validation-->
+    <dependency>
+      <groupId>org.glassfish.jersey.ext</groupId>
+      <artifactId>jersey-bean-validation</artifactId>
+      <version>${jersey.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-validator</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--Testing-->
+    <dependency>
+      <groupId>org.jepria.test</groupId>
+      <artifactId>jepria-rest-test</artifactId>
+      <version>2.0.0</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+      <artifactId>jersey-test-framework-provider-jetty</artifactId>
+      <version>${jersey.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.6.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--<dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>-->
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -186,9 +243,6 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
-          <configuration>
-            <skipTests>true</skipTests>
-          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -226,7 +280,6 @@
               </artifactItems>
             </configuration>
           </execution>
-
         </executions>
       </plugin>
 
@@ -253,6 +306,14 @@
             </resource>
           </webResources>
           <packagingExcludes>WEB-INF/classes/</packagingExcludes>
+
+          <archive>
+            <addMavenDescriptor>false</addMavenDescriptor>
+            <manifestEntries>
+              <Built-By>developer</Built-By>
+            </manifestEntries>
+          </archive>
+
         </configuration>
       </plugin>
 
@@ -270,6 +331,12 @@
             <configuration>
               <classesDirectory>${project.build.directory}/classes</classesDirectory>
               <finalName>${project.build.finalName}-web</finalName>
+              <archive>
+                <addMavenDescriptor>false</addMavenDescriptor>
+                <manifestEntries>
+                  <Built-By>developer</Built-By>
+                </manifestEntries>
+              </archive>
             </configuration>
           </execution>
         </executions>
@@ -286,7 +353,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+              <outputDirectory>${basedir}/target/extra-resources</outputDirectory>
               <resources>
                 <resource>
                   <directory>src/main/java</directory>
@@ -323,21 +390,34 @@
         </executions>
       </plugin>
 
+      <!--
+        Конфигурация может быть задействована при необходимости отдельного деплоя модуля
+        service-rest на Tomcat, например, для проведения интеграционных тестов.
+      -->
+      <!--
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
-        <executions>
-        </executions>
         <configuration>
           <update>true</update>
           <url>http://localhost:8080/manager/text</url>
-          <username>admin</username>
-          <password>123666</password>
+          <username>username</username>
+          <password>password</password>
+          <path>/${project.build.finalName}</path>
           <failOnError>true</failOnError>
-          <path>/jepriashowcase-service-rest</path>
         </configuration>
+        <executions>
+          <execution>
+            <id>tomcat-deploy</id>
+            <goals>
+              <goal>redeploy</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+          </execution>
+        </executions>
       </plugin>
+      -->
 
       <plugin>
         <groupId>net.ggtools.maven</groupId>
@@ -369,14 +449,34 @@
             <id>update-jepria-snapshot</id>
             <phase>validate</phase>
             <configuration>
-              <file>${BIN_HOME}/deploy/org/jepria/jepria/${jepria.version}/jepria-${jepria.version}.jar</file>
+              <file>${BIN_HOME}/build/org/jepria/jepria-rest/${jepria.version}/jepria-rest-${jepria.version}.jar</file>
               <groupId>org.jepria</groupId>
-              <artifactId>jepria</artifactId>
+              <artifactId>jepria-rest</artifactId>
               <version>${jepria.version}</version>
               <packaging>jar</packaging>
             </configuration>
             <goals>
               <goal>update-snapshot</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.22.2</version>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
             </goals>
           </execution>
         </executions>

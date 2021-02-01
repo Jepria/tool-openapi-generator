@@ -1,0 +1,42 @@
+package {{apiPackage}};
+
+package {{apiPackage}}.dao.{{entityName}}Dao;
+import org.jepria.server.data.OptionDto;
+import org.jepria.server.service.security.Credential;
+
+import java.util.List;
+
+public class {{entityName}}ServiceImpl implements {{entityName}}Service {
+
+  private {{entityName}}Dao dao;
+
+  public {{entityName}}ServiceImpl({{entityName}}Dao dao) {
+    this.dao = dao;
+  }
+
+{{#operations}}
+  {{#operation}}
+{{#isGet}}
+  public {{returnType}} {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}){
+    return {{entityName}}ServerFactory.getInstance().getDao().{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+  }
+{{/isGet}}
+{{#isPut}}
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+    {{entityName}}ServerFactory.getInstance().getDao().{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+  }
+{{/isPut}}
+{{#isPost}}
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+    {{entityName}}ServerFactory.getInstance().getDao().{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+  }
+{{/isPost}}
+{{#isDelete}}
+  public void {{nickname}}({{#allParams}}{{type}} {{name}}, {{/allParams}}) {
+    {{entityName}}ServerFactory.getInstance().getDao().{{nickname}}({{#allParams}}{{name}}, {{/allParams}});
+    }
+{{/isDelete}}
+  {{/operation}}
+{{/operations}}
+
+}

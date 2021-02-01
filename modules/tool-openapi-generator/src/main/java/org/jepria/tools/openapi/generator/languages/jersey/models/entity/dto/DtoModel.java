@@ -17,7 +17,7 @@ import java.util.Map;
 public class DtoModel {
 
   private String modelPackage;
-  private String className;
+  private String entityName;
   List<DtoField> fields = new ArrayList<>();
 
   public void setFields(List<DtoField> fields) {
@@ -52,19 +52,19 @@ public class DtoModel {
         }
       }
       dto.setFields(fields);
-      dto.setClassName(className);
+      dto.setEntityName(className);
       dtos.add(dto);
     }
 
     return dtos;
   }
 
-  public void setClassName(String className) {
-    this.className = className;
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
   }
 
-  public String getClassName() {
-    return className;
+  public String getEntityName() {
+    return entityName;
   }
 
   public void setModelPackage(String modelPackage) {

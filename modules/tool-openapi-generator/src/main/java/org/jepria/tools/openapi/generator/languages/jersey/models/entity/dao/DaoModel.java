@@ -7,7 +7,7 @@ import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.op
 public class DaoModel {
 
   private String apiPackage;
-  private String className;
+  private String entityName;
   private String modelPackage;
 
   private List<OtherJaxrsOperation> operations = new ArrayList<>();
@@ -20,12 +20,12 @@ public class DaoModel {
     this.apiPackage = apiPackage;
   }
 
-  public String getClassName() {
-    return className;
+  public String getEntityName() {
+    return entityName;
   }
 
-  public void setClassName(String className) {
-    this.className = className;
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
   }
 
   public List<OtherJaxrsOperation> getOperations() {

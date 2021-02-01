@@ -20,7 +20,7 @@ public class JaxrsAdapterModel {
   private String  apiPackage;
   private String  modelPackage;
   private String  mainPackage;
-  private String  className;
+  private String  entityName;
   private String  rootPath;
   private boolean hasCrud   = false;
   private boolean hasSearch = false;
@@ -31,15 +31,15 @@ public class JaxrsAdapterModel {
 
   public JaxrsAdapterModel(String rootPath) {
     this.rootPath  = rootPath;
-    this.className = rootPath;
+    this.entityName = rootPath;
   }
 
-  public void setClassName(String className) {
-    this.className = className;
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
   }
 
-  public String getClassName() {
-    return className;
+  public String getEntityName() {
+    return entityName;
   }
 
   public void setApiPackage(String apiPackage) {
@@ -87,9 +87,9 @@ public class JaxrsAdapterModel {
     }
 
     for (JaxrsAdapterModel model : resultDtosList) {
-      model.setModelPackage(mainPackage + "." + model.getClassName().toLowerCase() + ".dto");
-      model.setMainPackage(mainPackage + "." + model.getClassName().toLowerCase());
-      model.setApiPackage(mainPackage + "." + model.getClassName().toLowerCase() + ".rest");
+      model.setModelPackage(mainPackage + "." + model.getEntityName().toLowerCase() + ".dto");
+      model.setMainPackage(mainPackage + "." + model.getEntityName().toLowerCase());
+      model.setApiPackage(mainPackage + "." + model.getEntityName().toLowerCase() + ".rest");
     }
 
     return resultDtosList;
@@ -106,7 +106,7 @@ public class JaxrsAdapterModel {
 
     JaxrsAdapterModel dto = pathToDto(rootPath, current);
     dto.setApiPackage("." + StringUtils.camelize(StringUtils.sanitizeName(rootPath), true));
-    dto.setClassName(StringUtils.camelize(StringUtils.sanitizeName(rootApiName), false));
+    dto.setEntityName(StringUtils.camelize(StringUtils.sanitizeName(rootApiName), false));
     resultDtosList.add(dto);
 
     Set<String> childNames = paths.keySet().stream().filter(

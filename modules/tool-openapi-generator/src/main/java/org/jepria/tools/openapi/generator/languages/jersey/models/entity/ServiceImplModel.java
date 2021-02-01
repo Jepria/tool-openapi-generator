@@ -1,12 +1,11 @@
 package org.jepria.tools.openapi.generator.languages.jersey.models.entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.jepria.tools.openapi.generator.languages.jersey.models.entity.rest.operations.OtherJaxrsOperation;
 
-public class ServiceModel {
+import java.util.ArrayList;
+import java.util.List;
 
-  private static final String TEMPLATE_FILE_NAME = "/mustache-templates/service-rest/src/main/java/entity/Service.mustache";
+public class ServiceImplModel {
 
   private String apiPackage;
   private String entityName;

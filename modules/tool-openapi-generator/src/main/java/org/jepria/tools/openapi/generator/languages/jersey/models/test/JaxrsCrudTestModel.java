@@ -6,7 +6,7 @@ public class JaxrsCrudTestModel {
 
   private String apiPackage;
   private String modelPackage;
-  private String className;
+  private String entityName;
 
   public String getApiPackage() {
     return apiPackage;
@@ -24,11 +24,11 @@ public class JaxrsCrudTestModel {
     this.modelPackage = modelPackage;
   }
 
-  public String getClassName() {
-    return className;
+  public String getEntityName() {
+    return entityName;
   }
 
-  public void setClassName(String className) {
-    this.className = className;
+  public void setEntityName(String entityName) {
+    this.entityName = entityName;
   }
 }

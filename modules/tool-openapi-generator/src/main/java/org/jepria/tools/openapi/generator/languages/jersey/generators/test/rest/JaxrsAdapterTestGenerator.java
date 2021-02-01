@@ -30,7 +30,7 @@ public class JaxrsAdapterTestGenerator extends DefaultGenerator {
       dto.setModelPackage("com.technology.jep.jepriashowcase"); //TODO create parameters
       dto.setApiPackage("com.technology.jep.jepriashowcase" + dto.getApiPackage());
       try {
-        map.put(dto.getClassName() + "JaxrsAdapterTest", this.fillTemplate(dto));
+        map.put(dto.getEntityName() + "JaxrsAdapterTest", this.fillTemplate(dto));
       } catch (IOException e) {
         e.printStackTrace();
       }

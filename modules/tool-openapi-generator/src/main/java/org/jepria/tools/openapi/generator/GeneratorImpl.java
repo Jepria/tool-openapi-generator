@@ -12,9 +12,16 @@ public class GeneratorImpl {
 
   public void generate(Object model, String path, String fileName, String templateFileName) throws IOException {
 
-    String filledTemplate = fillTemplate(model, templateFileName);
+    try {
+      String filledTemplate = fillTemplate(model, templateFileName);
+      saveToFile(filledTemplate, path, fileName);
+    } catch (Exception e) {
+      System.out.println(e);
+      System.out.println("Error:");
+      System.out.println("   template: " + templateFileName );
+      System.out.println("   template: " + fileName );
+    }
 
-    saveToFile(filledTemplate, path, fileName);
   }
 
   private String fillTemplate(Object model, String templateFileName) throws IOException {

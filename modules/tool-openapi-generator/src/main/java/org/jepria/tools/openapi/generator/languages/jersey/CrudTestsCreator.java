@@ -47,12 +47,12 @@ public class CrudTestsCreator {
 
     List<JaxrsAdapterModel> models = JaxrsAdapterModel.getFromSpec(spec, this.basePackage);
     for (JaxrsAdapterModel model : models) {
-      String className     = model.getClassName();
+      String className     = model.getEntityName();
       String entityPackage = this.basePackage + "." + className.toLowerCase();
 
       JaxrsCrudTestModel dto = new JaxrsCrudTestModel();
       dto.setApiPackage(entityPackage);
-      dto.setClassName(className);
+      dto.setEntityName(className);
       dto.setModelPackage(entityPackage + ".dto");
 
       String fileName = className + "JaxrsAdapterCrudTestIT.java";
